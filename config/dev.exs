@@ -1,9 +1,10 @@
 import Config
+config :ash, policies: [show_policy_breakdowns?: true]
 
 # Configure your database
 config :dfoto, Dfoto.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "malmz",
+  password: "",
   hostname: "localhost",
   database: "dfoto_dev",
   stacktrace: true,
@@ -64,7 +65,7 @@ config :dfoto, DfotoWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :dfoto, dev_routes: true
+config :dfoto, dev_routes: true, token_signing_secret: "RAUKx6sBU76+LKUO+qTl2fuglPhQwvNM"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"

@@ -15,7 +15,8 @@ defmodule Dfoto.Application do
       # Start a worker by calling: Dfoto.Worker.start_link(arg)
       # {Dfoto.Worker, arg},
       # Start to serve requests, typically the last entry
-      DfotoWeb.Endpoint
+      DfotoWeb.Endpoint,
+      {AshAuthentication.Supervisor, [otp_app: :dfoto]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,4 +1,7 @@
 import Config
+config :dfoto, token_signing_secret: "FgW++SMxJV1Yrh9YhA6Hp5h9vwWWpUMA"
+config :bcrypt_elixir, log_rounds: 1
+config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true
 
 # Configure your database
 #
