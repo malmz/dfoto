@@ -2,15 +2,15 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": true,
+      "default": "fragment(\"uuid_generate_v7()\")",
+      "generated?": false,
       "precision": null,
       "primary_key?": true,
       "references": null,
       "scale": null,
       "size": null,
       "source": "id",
-      "type": "bigint"
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -91,17 +91,17 @@
           "global": null,
           "strategy": null
         },
-        "name": "image_album_id_fkey",
+        "name": "images_album_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "album"
+        "table": "albums"
       },
       "scale": null,
       "size": null,
       "source": "album_id",
-      "type": "bigint"
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -122,7 +122,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "image_photographer_id_fkey",
+        "name": "images_photographer_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -132,7 +132,7 @@
       "scale": null,
       "size": null,
       "source": "photographer_id",
-      "type": "bigint"
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -153,7 +153,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "image_user_id_fkey",
+        "name": "images_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -163,7 +163,7 @@
       "scale": null,
       "size": null,
       "source": "user_id",
-      "type": "bigint"
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -171,12 +171,12 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": false,
-  "hash": "543AF2374DDE8A88287FEC5FB34DA2B79758E74EC6770E3BB0F4813D372D71FB",
+  "hash": "B873AE6A01DA745F008718E8DFCAA3206F3D91F833E3808188135E31595FC7F9",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "image_single_thumbnail_index",
+      "index_name": "images_single_thumbnail_index",
       "keys": [
         {
           "type": "atom",
@@ -195,5 +195,5 @@
   },
   "repo": "Elixir.Dfoto.Repo",
   "schema": null,
-  "table": "image"
+  "table": "images"
 }

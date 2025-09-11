@@ -16,8 +16,7 @@ config :ash,
   keep_read_action_loads_when_loading?: false,
   default_actions_require_atomic?: true,
   read_action_after_action_hooks_in_order?: true,
-  bulk_actions_default_to_errors?: true,
-  default_belongs_to_type: :integer
+  bulk_actions_default_to_errors?: true
 
 config :spark,
   formatter: [

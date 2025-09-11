@@ -2,15 +2,15 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": true,
+      "default": "fragment(\"uuid_generate_v7()\")",
+      "generated?": false,
       "precision": null,
       "primary_key?": true,
       "references": null,
       "scale": null,
       "size": null,
       "source": "id",
-      "type": "bigint"
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -90,7 +90,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "3D2717B677D561056C581C890868C7173003F1C4C6B4C7A8F535C93B2BDA5183",
+  "hash": "61091013934034E8E3E1B3A24EFB1332694B40AA694C824ACAE7323EEFF5B9B2",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -99,5 +99,5 @@
   },
   "repo": "Elixir.Dfoto.Repo",
   "schema": null,
-  "table": "album"
+  "table": "albums"
 }

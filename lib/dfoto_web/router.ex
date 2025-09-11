@@ -43,10 +43,13 @@ defmodule DfotoWeb.Router do
 
     get "/", PageController, :home
 
-    # live "/albums", AlbumLive.Index, :index
-    # live "/albums/new", AlbumLive.Form, :new
-    # live "/albums/:id", AlbumLive.Show, :show
-    # live "/albums/:id/edit", AlbumLive.Form, :edit
+    live "/albums", AlbumLive.Index, :index
+    live "/albums/new", AlbumLive.Form, :new
+    live "/albums/:id/edit", AlbumLive.Form, :edit
+
+    live "/albums/:id", AlbumLive.Show, :show
+    live "/albums/:id/show/edit", AlbumLive.Show, :edit
+
     auth_routes AuthController, Dfoto.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

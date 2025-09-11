@@ -4,7 +4,7 @@ defmodule Dfoto.Gallery.Image do
     data_layer: AshPostgres.DataLayer
 
   postgres do
-    table "image"
+    table "images"
     repo Dfoto.Repo
     identity_wheres_to_sql single_thumbnail: "is_thumbnail"
   end
@@ -16,7 +16,7 @@ defmodule Dfoto.Gallery.Image do
   end
 
   attributes do
-    integer_primary_key :id
+    uuid_v7_primary_key :id
     attribute :photographer_guest_name, :string
 
     attribute :taken_at, :datetime do

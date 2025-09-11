@@ -4,34 +4,36 @@ defmodule Dfoto.Gallery.Album do
     data_layer: AshPostgres.DataLayer
 
   postgres do
-    table "album"
+    table "albums"
     repo Dfoto.Repo
   end
 
   actions do
-    defaults [:destroy, create: :*, update: :*]
+    defaults [:read, :destroy, create: :*, update: :*]
+    default_accept [:title, :description]
 
     read :published do
-      filter expr(status == :published)
+      filter expr(state == :published)
+      pagination required?: false, offset?: true, keyset?: true
     end
 
     update :publish do
-      set_attribute(:status, :published)
+      set_attribute(:state, :published)
     end
 
     update :unpublish do
-      set_attribute(:status, :draft)
+      set_attribute(:state, :draft)
     end
 
     update :archive do
-      set_attribute(:status, :archived)
+      set_attribute(:state, :archived)
     end
 
     read :all
   end
 
   attributes do
-    integer_primary_key :id
+    uuid_v7_primary_key :id
     attribute :title, :string
     attribute :description, :string
 

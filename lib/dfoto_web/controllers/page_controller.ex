@@ -3,7 +3,7 @@ defmodule DfotoWeb.PageController do
   use DfotoWeb, :controller
 
   def home(conn, _params) do
-    albums = Gallery.list_albums()
+    albums = Gallery.published_albums!()
 
     conn
     |> assign(:albums, albums)

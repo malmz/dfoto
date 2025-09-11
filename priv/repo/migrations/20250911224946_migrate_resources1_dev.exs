@@ -8,12 +8,8 @@ defmodule Dfoto.Repo.Migrations.MigrateResources1 do
   use Ecto.Migration
 
   def up do
-    alter table(:users) do
-      modify :id, :bigserial, default: nil
-    end
-
-    create table(:image, primary_key: false) do
-      add :id, :bigserial, null: false, primary_key: true
+    create table(:images, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("uuid_generate_v7()"), primary_key: true
       add :photographer_guest_name, :text
       add :taken_at, :utc_datetime, default: fragment("(now() AT TIME ZONE 'utc')")
       add :is_thumbnail, :boolean
@@ -26,47 +22,47 @@ defmodule Dfoto.Repo.Migrations.MigrateResources1 do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :album_id, :bigint
-      add :photographer_id, :bigint
-      add :user_id, :bigint
+      add :album_id, :uuid
+      add :photographer_id, :uuid
+      add :user_id, :uuid
     end
 
-    create table(:album, primary_key: false) do
-      add :id, :bigserial, null: false, primary_key: true
+    create table(:albums, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("uuid_generate_v7()"), primary_key: true
     end
 
-    alter table(:image) do
+    alter table(:images) do
       modify :album_id,
-             references(:album,
+             references(:albums,
                column: :id,
-               name: "image_album_id_fkey",
-               type: :bigint,
+               name: "images_album_id_fkey",
+               type: :uuid,
                prefix: "public"
              )
 
       modify :photographer_id,
              references(:users,
                column: :id,
-               name: "image_photographer_id_fkey",
-               type: :bigint,
+               name: "images_photographer_id_fkey",
+               type: :uuid,
                prefix: "public"
              )
 
       modify :user_id,
              references(:users,
                column: :id,
-               name: "image_user_id_fkey",
-               type: :bigint,
+               name: "images_user_id_fkey",
+               type: :uuid,
                prefix: "public"
              )
     end
 
-    create unique_index(:image, [:album_id],
-             name: "image_single_thumbnail_index",
+    create unique_index(:images, [:album_id],
+             name: "images_single_thumbnail_index",
              where: "(is_thumbnail)"
            )
 
-    alter table(:album) do
+    alter table(:albums) do
       add :title, :text
       add :description, :text
       add :state, :text, default: "draft"
@@ -83,7 +79,7 @@ defmodule Dfoto.Repo.Migrations.MigrateResources1 do
   end
 
   def down do
-    alter table(:album) do
+    alter table(:albums) do
       remove :modified_at
       remove :created_at
       remove :start_at
@@ -92,26 +88,22 @@ defmodule Dfoto.Repo.Migrations.MigrateResources1 do
       remove :title
     end
 
-    drop_if_exists unique_index(:image, [:album_id], name: "image_single_thumbnail_index")
+    drop_if_exists unique_index(:images, [:album_id], name: "images_single_thumbnail_index")
 
-    drop constraint(:image, "image_album_id_fkey")
+    drop constraint(:images, "images_album_id_fkey")
 
-    drop constraint(:image, "image_photographer_id_fkey")
+    drop constraint(:images, "images_photographer_id_fkey")
 
-    drop constraint(:image, "image_user_id_fkey")
+    drop constraint(:images, "images_user_id_fkey")
 
-    alter table(:image) do
-      modify :user_id, :bigint
-      modify :photographer_id, :bigint
-      modify :album_id, :bigint
+    alter table(:images) do
+      modify :user_id, :uuid
+      modify :photographer_id, :uuid
+      modify :album_id, :uuid
     end
 
-    drop table(:album)
+    drop table(:albums)
 
-    drop table(:image)
-
-    alter table(:users) do
-      modify :id, :uuid, default: fragment("gen_random_uuid()")
-    end
+    drop table(:images)
   end
 end
