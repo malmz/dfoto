@@ -10,36 +10,58 @@ defmodule Dfoto.Gallery.Album do
 
   actions do
     defaults [:read, :destroy, create: :*, update: :*]
-    default_accept [:title, :description]
 
     read :published do
-      filter expr(state == :published)
+      filter expr(status == :published)
       pagination required?: false, offset?: true, keyset?: true
     end
 
     update :publish do
-      set_attribute(:state, :published)
+      accept []
+
+      validate attribute_does_not_equal(:status, :published) do
+        message "Album is already published"
+      end
+
+      set_attribute(:status, :published)
     end
 
     update :unpublish do
-      set_attribute(:state, :draft)
+      accept []
+
+      validate attribute_does_not_equal(:status, :draft) do
+        message "Album is already a draft"
+      end
+
+      set_attribute(:status, :draft)
     end
 
     update :archive do
-      set_attribute(:state, :archived)
-    end
+      accept []
 
-    read :all
+      validate attribute_does_not_equal(:status, :archived) do
+        message "Album is already archived"
+      end
+
+      set_attribute(:status, :archived)
+    end
   end
 
   attributes do
     uuid_v7_primary_key :id
-    attribute :title, :string
-    attribute :description, :string
 
-    attribute :state, :atom do
+    attribute :title, :string do
+      allow_nil? false
+    end
+
+    attribute :description, :string do
+      allow_nil? false
+    end
+
+    attribute :status, :atom do
       constraints one_of: [:draft, :published, :archived]
       default :draft
+      allow_nil? false
     end
 
     attribute :start_at, :datetime

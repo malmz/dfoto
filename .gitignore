@@ -1,6 +1,7 @@
 # The directory Mix will write compiled artifacts to.
 /_build/
 /.elixir_ls/
+/.expert/
 
 # If you run "mix test --cover", coverage assets end up here.
 /cover/
@@ -36,3 +37,4 @@ dfoto-*.tar
 npm-debug.log
 /assets/node_modules/
 
+/config/secrets.exs
