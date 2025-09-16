@@ -9,7 +9,13 @@ defmodule Dfoto.Gallery.Album do
   end
 
   actions do
+    default_accept [:title, :description, :start_at, :status]
     defaults [:read, :destroy, create: :*, update: :*]
+
+    read :all do
+      # primary? true
+      pagination required?: false, offset?: true, keyset?: true
+    end
 
     read :published do
       filter expr(status == :published)
@@ -64,7 +70,12 @@ defmodule Dfoto.Gallery.Album do
       allow_nil? false
     end
 
-    attribute :start_at, :datetime
+    attribute :start_at, :datetime do
+      allow_nil? false
+      default &DateTime.utc_now/0
+      match_other_defaults? true
+    end
+
     create_timestamp :created_at
     update_timestamp :modified_at
   end

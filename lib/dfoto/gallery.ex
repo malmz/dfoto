@@ -1,5 +1,9 @@
 defmodule Dfoto.Gallery do
-  use Ash.Domain, otp_app: :dfoto
+  use Ash.Domain, otp_app: :dfoto, extensions: [AshAdmin.Domain]
+
+  admin do
+    show? true
+  end
 
   resources do
     resource Dfoto.Gallery.Album do

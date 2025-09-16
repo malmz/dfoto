@@ -1,10 +1,9 @@
 <Layouts.flash_group flash={@flash} />
 <main>
-  <div>
-    <ul class="list">
-      <li :for={album <- @albums} class="list-row">
-        <a href={~p"/album/#{album.id}"}>{album.title}</a>
-      </li>
-    </ul>
-  </div>
+  <h1 class="text-lg">Albums</h1>
+  <ul class="list">
+    <li :for={album <- @albums} class="list-row">
+      <a href={~p"/album/#{album.id}"}>{album.title}</a>
+    </li>
+  </ul>
 </main>

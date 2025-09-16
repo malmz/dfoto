@@ -1,4 +1,5 @@
 defmodule DfotoWeb.AuthController do
+  require Logger
   use DfotoWeb, :controller
   use AshAuthentication.Phoenix.Controller
 
@@ -36,6 +37,7 @@ defmodule DfotoWeb.AuthController do
           """
 
         _ ->
+          Logger.debug("Auth error #{inspect(reason)}")
           "Incorrect email or password"
       end
 

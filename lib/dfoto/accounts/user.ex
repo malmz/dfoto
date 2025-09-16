@@ -52,7 +52,7 @@ defmodule Dfoto.Accounts.User do
         user_info = Ash.Changeset.get_argument(changeset, :user_info)
 
         roles =
-          user_info["roles"]
+          Map.get(user_info, "roles", [])
           |> Enum.flat_map(fn r ->
             case r do
               "dfoto" -> [:admin]
@@ -65,6 +65,13 @@ defmodule Dfoto.Accounts.User do
         |> Ash.Changeset.change_attributes(Map.take(user_info, ["name"]))
         |> Ash.Changeset.change_attribute(:authentik_id, user_info["sub"])
         |> Ash.Changeset.change_attribute(:roles, roles)
+      end
+
+      change fn changeset, _ ->
+        Ash.Changeset.after_transaction(changeset, fn _, result ->
+          IO.inspect(result)
+          result
+        end)
       end
     end
   end

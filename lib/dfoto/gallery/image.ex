@@ -9,6 +9,10 @@ defmodule Dfoto.Gallery.Image do
     identity_wheres_to_sql single_thumbnail: "is_thumbnail"
   end
 
+  actions do
+    defaults [:read, :destroy, create: :*, update: :*]
+  end
+
   validations do
     validate negate(present(:photographer_guest_name)) do
       where present(:photographer)
