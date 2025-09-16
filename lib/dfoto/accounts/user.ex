@@ -51,9 +51,20 @@ defmodule Dfoto.Accounts.User do
       change fn changeset, _ ->
         user_info = Ash.Changeset.get_argument(changeset, :user_info)
 
+        roles =
+          user_info["roles"]
+          |> Enum.flat_map(fn r ->
+            case r do
+              "dfoto" -> [:admin]
+              "dfoto-asp" -> [:asp]
+              _ -> []
+            end
+          end)
+
         changeset
-        |> Ash.Changeset.change_attributes(Map.take(user_info, ["name", "roles"]))
+        |> Ash.Changeset.change_attributes(Map.take(user_info, ["name"]))
         |> Ash.Changeset.change_attribute(:authentik_id, user_info["sub"])
+        |> Ash.Changeset.change_attribute(:roles, roles)
       end
     end
   end
@@ -72,6 +83,11 @@ defmodule Dfoto.Accounts.User do
     uuid_primary_key :id
     attribute :authentik_id, :string, allow_nil?: false
     attribute :name, :string, allow_nil?: false
+
+    attribute :roles, {:array, :atom} do
+      allow_nil? false
+      constraints items: [one_of: [:asp, :admin]]
+    end
   end
 
   identities do
