@@ -1,57 +1,60 @@
 defmodule DfotoWeb.AuthController do
-  require Logger
   use DfotoWeb, :controller
-  use AshAuthentication.Phoenix.Controller
+  alias Oidcc.Plug.AuthorizationCallback
 
-  def success(conn, activity, user, _token) do
-    return_to = get_session(conn, :return_to) || ~p"/"
+  plug Oidcc.Plug.Authorize,
+       [
+         provider: Application.compile_env(:dfoto, [__MODULE__, :provider]),
+         client_id: &__MODULE__.client_id/0,
+         client_secret: &__MODULE__.client_secret/0,
+         redirect_uri: &__MODULE__.callback_uri/0
+       ]
+       when action in [:authorize]
 
-    message =
-      case activity do
-        {:confirm_new_user, :confirm} -> "Your email address has now been confirmed"
-        {:password, :reset} -> "Your password has successfully been reset"
-        _ -> "You are now signed in"
-      end
+  plug AuthorizationCallback,
+       [
+         provider: Application.compile_env(:dfoto, [__MODULE__, :provider]),
+         client_id: &__MODULE__.client_id/0,
+         client_secret: &__MODULE__.client_secret/0,
+         redirect_uri: &__MODULE__.callback_uri/0
+       ]
+       when action in [:callback]
 
+  def authorize(conn, _params) do
     conn
-    |> delete_session(:return_to)
-    |> store_in_session(user)
-    # If your resource has a different name, update the assign name here (i.e :current_admin)
-    |> assign(:current_user, user)
-    |> put_flash(:info, message)
-    |> redirect(to: return_to)
   end
 
-  def failure(conn, activity, reason) do
-    message =
-      case {activity, reason} do
-        {_,
-         %AshAuthentication.Errors.AuthenticationFailed{
-           caused_by: %Ash.Error.Forbidden{
-             errors: [%AshAuthentication.Errors.CannotConfirmUnconfirmedUser{}]
-           }
-         }} ->
-          """
-          You have already signed in another way, but have not confirmed your account.
-          You can confirm your account using the link we sent to you, or by resetting your password.
-          """
-
-        _ ->
-          Logger.debug("Auth error #{inspect(reason)}")
-          "Incorrect email or password"
-      end
-
+  def callback(
+        %Plug.Conn{private: %{AuthorizationCallback => {:ok, {_token, userinfo}}}} = conn,
+        params
+      ) do
     conn
-    |> put_flash(:error, message)
-    |> redirect(to: ~p"/sign-in")
+    |> put_session("oidcc_claims", userinfo)
+    |> redirect(
+      to:
+        case params[:state] do
+          nil -> "/"
+          state -> state
+        end
+    )
   end
 
-  def sign_out(conn, _params) do
-    return_to = get_session(conn, :return_to) || ~p"/"
+  def callback(%Plug.Conn{private: %{AuthorizationCallback => {:error, reason}}} = conn, _params) do
+    conn |> put_status(400) |> render(:error, reason: reason)
+  end
 
-    conn
-    |> clear_session(:dfoto)
-    |> put_flash(:info, "You are now signed out")
-    |> redirect(to: return_to)
+  @doc false
+  def client_id do
+    Application.fetch_env!(:dfoto, __MODULE__)[:client_id]
+  end
+
+  @doc false
+  def client_secret do
+    Application.fetch_env!(:dfoto, __MODULE__)[:client_secret]
+  end
+
+  @doc false
+  def callback_uri do
+    url(~p"/auth/callback")
   end
 end
