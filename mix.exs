@@ -41,6 +41,8 @@ defmodule Dfoto.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:oidcc_plug, "~> 0.3"},
+      {:oidcc, "~> 3.0"},
       {:ash_rbac, "~> 0.6"},
       {:picosat_elixir, "~> 0.2"},
       {:sourceror, "~> 1.8", only: [:dev, :test]},

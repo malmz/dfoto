@@ -8,6 +8,11 @@ defmodule Dfoto.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Oidcc.ProviderConfiguration.Worker,
+       %{
+         name: Dfoto.OidccConfigProvider,
+         issuer: Application.fetch_env!(:dfoto, Dfoto.OidccConfigProvider)[:issuer]
+       }},
       DfotoWeb.Telemetry,
       Dfoto.Repo,
       {DNSCluster, query: Application.get_env(:dfoto, :dns_cluster_query) || :ignore},

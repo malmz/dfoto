@@ -72,6 +72,9 @@ if config_env() == :prod do
       System.get_env("TOKEN_SIGNING_SECRET") ||
         raise("Missing environment variable `TOKEN_SIGNING_SECRET`!")
 
+  config :dfoto, Dfoto.OidccConfigProvider,
+    issuer: System.get_env("DFOTO_OIDCC_CONFIG_PROVIDER_ISSUER", "https://authk.codegrotto.com")
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
