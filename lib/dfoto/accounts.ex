@@ -6,7 +6,6 @@ defmodule Dfoto.Accounts do
   end
 
   resources do
-    resource Dfoto.Accounts.Token
     resource Dfoto.Accounts.User
   end
 end

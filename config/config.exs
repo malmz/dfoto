@@ -7,7 +7,7 @@
 # General application configuration
 import Config
 
-config :dfoto, DfotoWeb.AuthController, provider: Dfoto.OidccConfigProvider
+config :dfoto, DfotoWeb.AuthController, provider: Dfoto.AuthentikOidcProvider
 
 config :ash,
   allow_forbidden_field_for_relationships_by_default?: true,

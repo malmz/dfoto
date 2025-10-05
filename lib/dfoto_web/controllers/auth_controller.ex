@@ -1,5 +1,6 @@
 defmodule DfotoWeb.AuthController do
   use DfotoWeb, :controller
+  require Logger
   alias Oidcc.Plug.AuthorizationCallback
 
   plug Oidcc.Plug.Authorize,
@@ -25,9 +26,16 @@ defmodule DfotoWeb.AuthController do
   end
 
   def callback(
-        %Plug.Conn{private: %{AuthorizationCallback => {:ok, {_token, userinfo}}}} = conn,
+        %Plug.Conn{private: %{AuthorizationCallback => {:ok, {token, userinfo}}}} = conn,
         params
       ) do
+    Logger.debug("Userinfo: #{inspect(userinfo)}")
+    Logger.debug("Tokens: #{inspect(token)}")
+
+    Dfoto.Accounts.User
+    |> Ash.Changeset.for_create(:login, %{user_info: userinfo, tokens: token})
+    |> Ash.create!()
+
     conn
     |> put_session("oidcc_claims", userinfo)
     |> redirect(
@@ -45,12 +53,12 @@ defmodule DfotoWeb.AuthController do
 
   @doc false
   def client_id do
-    Application.fetch_env!(:dfoto, __MODULE__)[:client_id]
+    Application.fetch_env!(:dfoto, :authentik)[:client_id]
   end
 
   @doc false
   def client_secret do
-    Application.fetch_env!(:dfoto, __MODULE__)[:client_secret]
+    Application.fetch_env!(:dfoto, :authentik)[:client_secret]
   end
 
   @doc false

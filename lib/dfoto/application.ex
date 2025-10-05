@@ -10,8 +10,8 @@ defmodule Dfoto.Application do
     children = [
       {Oidcc.ProviderConfiguration.Worker,
        %{
-         name: Dfoto.OidccConfigProvider,
-         issuer: Application.fetch_env!(:dfoto, Dfoto.OidccConfigProvider)[:issuer]
+         name: Dfoto.AuthentikOidcProvider,
+         issuer: Application.fetch_env!(:dfoto, :authentik)[:issuer]
        }},
       DfotoWeb.Telemetry,
       Dfoto.Repo,
@@ -20,8 +20,7 @@ defmodule Dfoto.Application do
       # Start a worker by calling: Dfoto.Worker.start_link(arg)
       # {Dfoto.Worker, arg},
       # Start to serve requests, typically the last entry
-      DfotoWeb.Endpoint,
-      {AshAuthentication.Supervisor, [otp_app: :dfoto]}
+      DfotoWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
