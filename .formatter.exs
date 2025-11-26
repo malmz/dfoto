@@ -1,10 +1,10 @@
 [
   import_deps: [
-    :ash_admin,
     :ash_postgres,
     :ash_phoenix,
     :ash,
     :reactor,
+    :reactor_file,
     :ecto,
     :ecto_sql,
     :phoenix

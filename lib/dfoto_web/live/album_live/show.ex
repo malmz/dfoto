@@ -31,6 +31,6 @@ defmodule DfotoWeb.AlbumLive.Show do
     {:ok,
      socket
      |> assign(:page_title, "Show Album")
-     |> assign(:album, Ash.get!(Dfoto.Gallery.Album, id, actor: socket.assigns.current_user))}
+     |> assign(:album, Ash.get!(Dfoto.Gallery.Album, id))}
   end
 end

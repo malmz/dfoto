@@ -14,6 +14,10 @@ defmodule DfotoWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :media do
+    plug :fetch_session
+  end
+
   scope "/auth", DfotoWeb do
     pipe_through [:browser]
 
@@ -25,7 +29,9 @@ defmodule DfotoWeb.Router do
   scope "/", DfotoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :index
+    get "/:album_id", PageController, :show
+    get "/:album_id/:image_id", PageController, :image
 
     live "/albums", AlbumLive.Index, :index
     live "/albums/new", AlbumLive.Form, :new
@@ -54,16 +60,6 @@ defmodule DfotoWeb.Router do
 
       live_dashboard "/dashboard", metrics: DfotoWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
-    end
-  end
-
-  if Application.compile_env(:dfoto, :dev_routes) do
-    import AshAdmin.Router
-
-    scope "/admin" do
-      pipe_through :browser
-
-      ash_admin "/"
     end
   end
 end

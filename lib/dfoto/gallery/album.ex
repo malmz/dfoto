@@ -10,10 +10,10 @@ defmodule Dfoto.Gallery.Album do
 
   actions do
     default_accept [:title, :description, :start_at, :status]
-    defaults [:read, :destroy, create: :*, update: :*]
+    defaults [:destroy, create: :*, update: :*]
 
-    read :all do
-      # primary? true
+    read :read do
+      primary? true
       pagination required?: false, offset?: true, keyset?: true
     end
 
@@ -29,17 +29,17 @@ defmodule Dfoto.Gallery.Album do
         message "Album is already published"
       end
 
-      set_attribute(:status, :published)
+      change set_attribute(:status, :published)
     end
 
     update :unpublish do
       accept []
 
-      validate attribute_does_not_equal(:status, :draft) do
-        message "Album is already a draft"
+      validate attribute_equals(:status, :published) do
+        message "Album is not published"
       end
 
-      set_attribute(:status, :draft)
+      change set_attribute(:status, :draft)
     end
 
     update :archive do
@@ -49,7 +49,15 @@ defmodule Dfoto.Gallery.Album do
         message "Album is already archived"
       end
 
-      set_attribute(:status, :archived)
+      change set_attribute(:status, :archived)
+    end
+
+    update :unarchive do
+      accept []
+
+      validate attribute_equals(:status, :archived) do
+        message "Album is not archived"
+      end
     end
   end
 
@@ -58,10 +66,12 @@ defmodule Dfoto.Gallery.Album do
 
     attribute :title, :string do
       allow_nil? false
+      public? true
     end
 
     attribute :description, :string do
       allow_nil? false
+      public? true
     end
 
     attribute :status, :atom do
@@ -74,6 +84,7 @@ defmodule Dfoto.Gallery.Album do
       allow_nil? false
       default &DateTime.utc_now/0
       match_other_defaults? true
+      public? true
     end
 
     create_timestamp :created_at
@@ -83,9 +94,6 @@ defmodule Dfoto.Gallery.Album do
   relationships do
     has_many :images, Dfoto.Gallery.Image
 
-    has_one :thumbnail, Dfoto.Gallery.Image do
-      no_attributes? true
-      filter expr(is_thumbnail)
-    end
+    has_one :thumbnail, Dfoto.Gallery.Image
   end
 end

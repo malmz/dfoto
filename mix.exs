@@ -5,7 +5,7 @@ defmodule Dfoto.MixProject do
     [
       app: :dfoto,
       version: "0.1.0",
-      elixir: "~> 1.15",
+      elixir: "~> 1.19",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
@@ -46,13 +46,13 @@ defmodule Dfoto.MixProject do
       {:ash_rbac, "~> 0.6"},
       {:picosat_elixir, "~> 0.2"},
       {:sourceror, "~> 1.8", only: [:dev, :test]},
-      {:ash_admin, "~> 0.13"},
       {:ash_postgres, "~> 2.0"},
       {:ash_phoenix, "~> 2.0"},
-      {:ash, "~> 3.0"},
+      {:ash, "~> 3.9"},
       {:phoenix, "~> 1.8.1"},
       {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.13"},
+      {:ecto, "~> 3.13.2"},
+      {:ecto_sql, "~> 3.13.2"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -72,11 +72,16 @@ defmodule Dfoto.MixProject do
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.26"},
+      {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:igniter, "~> 0.6", only: [:dev, :test]}
+      {:mime, "~> 2.0"},
+      {:reactor, "~> 0.17.0"},
+      {:reactor_file, "~> 0.18.3"},
+      {:spark, "~> 2.3.3", override: true},
+      {:image, "~> 0.62.1"},
+      {:ok, "~> 2.3"}
     ]
   end
 

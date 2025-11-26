@@ -1,4 +1,6 @@
 defmodule Dfoto.Gallery.Image do
+  alias Dfoto.Gallery.UploadReactor
+
   use Ash.Resource,
     domain: Dfoto.Gallery,
     data_layer: AshPostgres.DataLayer
@@ -6,11 +8,26 @@ defmodule Dfoto.Gallery.Image do
   postgres do
     table "images"
     repo Dfoto.Repo
-    identity_wheres_to_sql single_thumbnail: "is_thumbnail"
   end
 
   actions do
-    defaults [:read, :destroy, create: :*, update: :*]
+    defaults [:read, :destroy, update: :*]
+
+    create :create do
+      accept [:filename, :taken_at]
+      argument :album_id, :uuid
+
+      change manage_relationship(:album_id, :album, type: :append_and_remove)
+    end
+
+    action :upload, :struct do
+      constraints instance_of: __MODULE__
+      argument :album_id, :uuid, allow_nil?: false
+      argument :file_path, :string, allow_nil?: false
+      argument :original_file_name, :string, allow_nil?: false
+
+      run UploadReactor
+    end
   end
 
   validations do
@@ -21,13 +38,15 @@ defmodule Dfoto.Gallery.Image do
 
   attributes do
     uuid_v7_primary_key :id
+
+    attribute :filename, :string, public?: true
+
     attribute :photographer_guest_name, :string
 
     attribute :taken_at, :datetime do
+      allow_nil? false
       default &DateTime.utc_now/0
     end
-
-    attribute :is_thumbnail, :boolean
 
     create_timestamp :created_at
     update_timestamp :updated_at
@@ -43,9 +62,5 @@ defmodule Dfoto.Gallery.Image do
     calculate :photographer_name,
               :string,
               expr(photographer_guest_name || photographer.name || "Unknown")
-  end
-
-  identities do
-    identity :single_thumbnail, [:album_id], where: expr(is_thumbnail)
   end
 end

@@ -1,0 +1,9 @@
+<Layouts.flash_group flash={@flash} />
+<main class="mx-auto my-8 prose">
+  <h1>Albums</h1>
+  <ul>
+    <li :for={album <- @albums}>
+      <a href={~p"/#{album.id}"}>{album.title}</a>
+    </li>
+  </ul>
+</main>

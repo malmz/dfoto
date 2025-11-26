@@ -1,0 +1,14 @@
+<Layouts.flash_group flash={@flash} />
+<main class="prose mx-auto my-8">
+  <h1>{@album.title}</h1>
+  <ul>
+    <li :for={image <- @album.images}>
+      <a href={~p"/#{@album.id}/#{image.id}"}>
+        <figure>
+          <img src={"/media/thumbnail/#{@album.id}/#{image.id}.webp"} />
+          <figcaption>{image.filename}</figcaption>
+        </figure>
+      </a>
+    </li>
+  </ul>
+</main>

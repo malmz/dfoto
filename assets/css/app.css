@@ -2,10 +2,12 @@
    https://tailwindcss.com/docs/configuration */
 
 @import "tailwindcss" source(none);
-@source "../../deps/ash_authentication_phoenix";
+/*@source "../../deps/ash_authentication_phoenix";*/
 @source "../css";
 @source "../js";
 @source "../../lib/dfoto_web";
+
+@plugin "@tailwindcss/typography";
 
 /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
    The heroicons installation itself is managed by your mix.exs */
@@ -15,7 +17,7 @@
    curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui.js
    Make sure to look at the daisyUI changelog: https://daisyui.com/docs/changelog/ */
 @plugin "../vendor/daisyui" {
-  themes: caramellatte --default;
+  themes: light --default;
 }
 
 /* Add variants based on LiveView classes */

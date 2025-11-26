@@ -1,0 +1,125 @@
+flowchart LR
+    start{"Start"}
+    start==>reactor_Dfoto.Gallery.UploadReactor
+    subgraph reactor_Dfoto.Gallery.UploadReactor["Dfoto.Gallery.UploadReactor"]
+        direction LR
+        input_84108329>"`**Input file_path**
+        `"]
+        input_104291244>"`**Input album_id**
+        `"]
+        input_1154350>"`**Input original_file_name**
+        `"]
+        input_1154350 -->|filename|step_129458311
+        input_104291244 -->|album_id|step_129458311
+        step_129458311["`**\{:\_\_input\_\_, :create\_image, \[:filename, :album\_id\]\} \(Reactor.Step.ReturnAllArguments\)**
+        `"]
+        step_46424776 -->|_|step_100991398
+        value_storage{{"`&quot;storage&quot;`"}}
+        value_storage -->|base_path|step_100991398
+        input_104291244 -->|album_id|step_100991398
+        step_120268825 -->|image_id|step_100991398
+        step_41066472 -->|original_path|step_100991398
+        step_100991398["`**generate\_preview \(Reactor.Step.Compose\)**`"]
+        subgraph reactor_37278501["{Dfoto.Gallery.PreviewReactor, :generate_preview}"]
+            direction LR
+            input_91438365>"`**Input base_path**
+            `"]
+            input_39881453>"`**Input album_id**
+            `"]
+            input_40519125>"`**Input image_id**
+            `"]
+            input_120127525>"`**Input original_path**
+            `"]
+            step_50683226 -->|base|step_66314659
+            input_40519125 -->|image|step_66314659
+            step_66314659["`**destination_path \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.PreviewReactor\.run\_0\_generated\_3C839A4CD56758D6A20DBF3278E2E894/1_`"]
+            step_50683226 -->|path|step_12402167
+            step_12402167["`**ensure\_folder \(Reactor.File.Step.MkdirP\)**
+            `"]
+            input_91438365 -->|base_path|step_50683226
+            input_39881453 -->|album_id|step_50683226
+            step_50683226["`**folder_path \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.PreviewReactor\.run\_0\_generated\_0FFF8A651E8623E86FBD53A65CE47D56/1_`"]
+            step_12402167 -->|_|step_97528868
+            input_120127525 -->|orig|step_97528868
+            step_66314659 -->|target|step_97528868
+            step_97528868["`**generate \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.PreviewReactor\.run\_0\_generated\_BF8B4C561819D6C091403429C6B8E919/1_`"]
+            return_37278501{"Return"}
+            step_66314659==>return_37278501
+        end
+        step_100991398-->input_120127525
+        step_100991398-->input_40519125
+        step_100991398-->input_39881453
+        step_100991398-->input_91438365
+        return_37278501-->step_100991398
+        step_46424776 -->|_|step_120524401
+        value_storage{{"`&quot;storage&quot;`"}}
+        value_storage -->|base_path|step_120524401
+        input_104291244 -->|album_id|step_120524401
+        step_120268825 -->|image_id|step_120524401
+        step_41066472 -->|original_path|step_120524401
+        step_120524401["`**generate\_thumbnail \(Reactor.Step.Compose\)**`"]
+        subgraph reactor_112530096["{Dfoto.Gallery.ThumbnailReactor, :generate_thumbnail}"]
+            direction LR
+            input_114604905>"`**Input base_path**
+            `"]
+            input_13445035>"`**Input album_id**
+            `"]
+            input_123188475>"`**Input image_id**
+            `"]
+            input_884279>"`**Input original_path**
+            `"]
+            step_70810171 -->|base|step_4254360
+            input_123188475 -->|image|step_4254360
+            step_4254360["`**destination_path \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.ThumbnailReactor\.run\_0\_generated\_3C839A4CD56758D6A20DBF3278E2E894/1_`"]
+            step_70810171 -->|path|step_60063326
+            step_60063326["`**ensure\_folder \(Reactor.File.Step.MkdirP\)**
+            `"]
+            input_114604905 -->|base_path|step_70810171
+            input_13445035 -->|album_id|step_70810171
+            step_70810171["`**folder_path \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.ThumbnailReactor\.run\_0\_generated\_0FFF8A651E8623E86FBD53A65CE47D56/1_`"]
+            step_60063326 -->|_|step_60082546
+            input_884279 -->|orig|step_60082546
+            step_4254360 -->|target|step_60082546
+            step_60082546["`**generate \(Reactor.Step.AnonFn\)**
+            - run: _&Dfoto\.Gallery\.ThumbnailReactor\.run\_0\_generated\_415497FECCFEBA671124B91392C54211/1_`"]
+            return_112530096{"Return"}
+            step_4254360==>return_112530096
+        end
+        step_120524401-->input_884279
+        step_120524401-->input_123188475
+        step_120524401-->input_13445035
+        step_120524401-->input_114604905
+        return_112530096-->step_120524401
+        step_110868103 -->|_|step_46424776
+        input_84108329 -->|source|step_46424776
+        step_41066472 -->|target|step_46424776
+        step_46424776["`**copy\_to\_album\_folder \(Reactor.File.Step.Cp\)**
+        `"]
+        step_64176478 -->|path|step_110868103
+        step_110868103["`**ensure\_image\_folder \(Reactor.File.Step.MkdirP\)**
+        `"]
+        step_64176478 -->|base|step_41066472
+        step_120268825 -->|image|step_41066472
+        step_8638538 -->|ext|step_41066472
+        step_41066472["`**destination_image_name \(Reactor.Step.AnonFn\)**
+        - run: _&Dfoto\.Gallery\.UploadReactor\.run\_0\_generated\_B20DCF3FB3D66901A823837889B28016/1_`"]
+        input_104291244 -->|album_id|step_64176478
+        step_64176478["`**image_folder \(Reactor.Step.AnonFn\)**
+        - run: _&Dfoto\.Gallery\.UploadReactor\.run\_0\_generated\_E6E5516520CB34C752542B44EC7C6CA1/1_`"]
+        step_129458311 -->|input|step_120268825
+        value_Dfoto.Gallery.Image{{"`Dfoto\.Gallery\.Image`"}}
+        value_Dfoto.Gallery.Image -->|initial|step_120268825
+        step_120268825["`**create\_image \(Ash.Reactor.CreateStep\)**
+        `"]
+        input_1154350 -->|file_name|step_8638538
+        step_8638538["`**file_extension \(Reactor.Step.AnonFn\)**
+        - run: _&Dfoto\.Gallery\.UploadReactor\.run\_0\_generated\_B37E8F5171F00945B56C666AD563930B/1_`"]
+        return_Dfoto.Gallery.UploadReactor{"Return"}
+        step_120268825==>return_Dfoto.Gallery.UploadReactor
+    end
+    
