@@ -38,3 +38,5 @@ npm-debug.log
 /assets/node_modules/
 
 /config/secrets.exs
+
+.DS_Store
