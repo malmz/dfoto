@@ -56,6 +56,10 @@ defmodule Dfoto.Gallery.Image do
     belongs_to :album, Dfoto.Gallery.Album
     belongs_to :photographer, Dfoto.Accounts.User
     belongs_to :user, Dfoto.Accounts.User
+
+    has_one :thumbnail_for, Dfoto.Gallery.Album do
+      destination_attribute :thumbnail_id
+    end
   end
 
   calculations do
