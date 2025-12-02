@@ -226,7 +226,7 @@ defmodule DfotoWeb.AlbumLive.Form do
                original_file_name: entry.client_name
              }) do
           {:ok, image} ->
-            {:ok, "/media/#{image.album_id}/#{image.id}.#{Path.extname(image.filename)}"}
+            {:ok, "/media/preview/#{image.album_id}/#{image.id}.webp"}
 
           {:error, reason} ->
             {:error, reason}
