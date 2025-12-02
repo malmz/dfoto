@@ -19,11 +19,22 @@ defmodule DfotoWeb.Router do
   end
 
   scope "/auth", DfotoWeb do
-    pipe_through [:browser]
+    pipe_through :browser
 
     get "/authorize", AuthController, :authorize
     get "/callback", AuthController, :callback
     post "/callback", AuthController, :callback
+  end
+
+  scope "/admin", DfotoWeb.AlbumLive do
+    pipe_through :browser
+
+    live "/albums", Index, :index
+    live "/albums/new", Form, :new
+    live "/albums/:id/edit", Form, :edit
+
+    live "/albums/:id", Show, :show
+    live "/albums/:id/show/edit", Show, :edit
   end
 
   scope "/", DfotoWeb do
@@ -32,13 +43,6 @@ defmodule DfotoWeb.Router do
     get "/", PageController, :index
     get "/:album_id", PageController, :show
     get "/:album_id/:image_id", PageController, :image
-
-    live "/albums", AlbumLive.Index, :index
-    live "/albums/new", AlbumLive.Form, :new
-    live "/albums/:id/edit", AlbumLive.Form, :edit
-
-    live "/albums/:id", AlbumLive.Show, :show
-    live "/albums/:id/show/edit", AlbumLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
