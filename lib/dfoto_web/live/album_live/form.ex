@@ -19,34 +19,34 @@ defmodule DfotoWeb.AlbumLive.Form do
       >
         <.input type="text" field={@form[:title]} />
         <.input type="textarea" field={@form[:description]} />
-        <.button phx-disable-with="Saving..." name="intent" value="save" variant="primary">
+        <.button phx-disable-with="Saving..." variant="primary">
           Save Album
         </.button>
         <%= if @album do %>
           <%= case @album.status do %>
             <% :draft -> %>
               <.button
+                type="button"
+                phx-click="publish"
                 phx-disable-with="Publishing..."
-                name="intent"
-                value="publish"
                 variant="warning"
               >
                 Publish
               </.button>
             <% :published -> %>
               <.button
+                type="button"
+                phx-click="unpublish"
                 phx-disable-with="Unpublishing..."
-                name="intent"
-                value="unpublish"
                 variant="warning"
               >
                 Unpublish
               </.button>
             <% :archived -> %>
               <.button
+                type="button"
+                phx-click="unarchive"
                 phx-disable-with="Unarchiving..."
-                name="intent"
-                value="unarchive"
                 variant="warning"
               >
                 Unarchive
@@ -131,7 +131,7 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", %{"intent" => "save", "album" => album_params}, socket) do
+  def handle_event("save", %{"album" => album_params}, socket) do
     case dbg(AshPhoenix.Form.submit(socket.assigns.form, params: album_params)) do
       {:ok, album} ->
         # notify_parent({:saved, album})
@@ -149,7 +149,7 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", %{"intent" => "publish"}, socket) do
+  def handle_event("publish", _params, socket) do
     album = socket.assigns[:album]
 
     case Gallery.publish_album(album) do
@@ -169,7 +169,7 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", %{"intent" => "unpublish"}, socket) do
+  def handle_event("unpublish", _params, socket) do
     album = socket.assigns[:album]
 
     case Gallery.unpublish_album(album) do
@@ -189,7 +189,7 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", %{"intent" => "unarchive"}, socket) do
+  def handle_event("unarchive", _params, socket) do
     album = socket.assigns[:album]
 
     case Gallery.unarchive_album(album) do
