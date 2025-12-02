@@ -41,6 +41,8 @@ defmodule Dfoto.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:live_debugger, "~> 0.5", only: [:dev]},
+      {:igniter, "~> 0.7", only: [:dev, :test], override: true},
       {:oidcc_plug, "~> 0.3"},
       {:oidcc, "~> 3.0"},
       {:ash_rbac, "~> 0.6"},
