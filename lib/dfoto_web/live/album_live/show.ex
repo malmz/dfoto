@@ -10,10 +10,10 @@ defmodule DfotoWeb.AlbumLive.Show do
         <:subtitle>This is a album record from your database.</:subtitle>
 
         <:actions>
-          <.button navigate={~p"/albums"}>
+          <.button navigate={~p"/admin/albums"}>
             <.icon name="hero-arrow-left" />
           </.button>
-          <.button variant="primary" navigate={~p"/albums/#{@album}/edit?return_to=show"}>
+          <.button variant="primary" navigate={~p"/admin/albums/#{@album}/edit?return_to=show"}>
             <.icon name="hero-pencil-square" /> Edit Album
           </.button>
         </:actions>

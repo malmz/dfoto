@@ -8,7 +8,7 @@ defmodule DfotoWeb.AlbumLive.Index do
       <.header>
         Listing Albums
         <:actions>
-          <.button variant="primary" navigate={~p"/albums/new"}>
+          <.button variant="primary" navigate={~p"/admin/albums/new"}>
             <.icon name="hero-plus" /> New Album
           </.button>
         </:actions>
@@ -17,16 +17,16 @@ defmodule DfotoWeb.AlbumLive.Index do
       <.table
         id="albums"
         rows={@streams.albums}
-        row_click={fn {_id, album} -> JS.navigate(~p"/albums/#{album}") end}
+        row_click={fn {_id, album} -> JS.navigate(~p"/admin/albums/#{album}") end}
       >
         <:col :let={{_id, album}} label="Id">{album.id}</:col>
 
         <:action :let={{_id, album}}>
           <div class="sr-only">
-            <.link navigate={~p"/albums/#{album}"}>Show</.link>
+            <.link navigate={~p"/admin/albums/#{album}"}>Show</.link>
           </div>
 
-          <.link navigate={~p"/albums/#{album}/edit"}>Edit</.link>
+          <.link navigate={~p"/admin/albums/#{album}/edit"}>Edit</.link>
         </:action>
 
         <:action :let={{id, album}}>
