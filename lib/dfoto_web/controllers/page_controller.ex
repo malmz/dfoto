@@ -3,7 +3,7 @@ defmodule DfotoWeb.PageController do
   use DfotoWeb, :controller
 
   def index(conn, _params) do
-    albums = Gallery.all_albums!()
+    albums = Gallery.published_albums!()
 
     conn
     |> assign(:albums, albums)
