@@ -1,4 +1,5 @@
 defmodule DfotoWeb.AlbumLive.Form do
+  require Logger
   alias Dfoto.Gallery
   use DfotoWeb, :live_view
 
@@ -161,7 +162,9 @@ defmodule DfotoWeb.AlbumLive.Form do
 
         {:noreply, socket}
 
-      {:error, _} ->
+      {:error, cause} ->
+        Logger.error(cause)
+
         {:noreply,
          socket
          |> put_flash(:error, "Could not publish album")}
