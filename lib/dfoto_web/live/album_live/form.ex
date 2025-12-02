@@ -87,7 +87,7 @@ defmodule DfotoWeb.AlbumLive.Form do
         <.button variant="primary">Upload</.button>
       </form>
 
-      <div>
+      <div :if={@album}>
         <figure :for={image <- @album.images}>
           <img src={image_path(image)} />
         </figure>
