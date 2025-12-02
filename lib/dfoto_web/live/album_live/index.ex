@@ -19,7 +19,10 @@ defmodule DfotoWeb.AlbumLive.Index do
         rows={@streams.albums}
         row_click={fn {_id, album} -> JS.navigate(~p"/admin/albums/#{album}") end}
       >
-        <:col :let={{_id, album}} label="Id">{album.id}</:col>
+        <:col :let={{_id, album}} label="Title">{album.title}</:col>
+        <:col :let={{_id, album}} label="Status">
+          <span class="badge badge-primary">{album.status}</span>
+        </:col>
 
         <:action :let={{_id, album}}>
           <div class="sr-only">
