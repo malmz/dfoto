@@ -136,6 +136,7 @@ defmodule DfotoWeb.AlbumLive.Form do
     case dbg(AshPhoenix.Form.submit(socket.assigns.form, params: album_params)) do
       {:ok, album} ->
         # notify_parent({:saved, album})
+        album = Ash.load!(album, :images)
 
         socket =
           socket
