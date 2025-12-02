@@ -219,22 +219,21 @@ defmodule DfotoWeb.AlbumLive.Form do
 
   @impl Phoenix.LiveView
   def handle_event("save_upload", _params, socket) do
-    uploaded_files =
-      consume_uploaded_entries(socket, :images, fn meta, entry ->
-        case Gallery.upload_image(%{
-               file_path: meta.path,
-               album_id: socket.assigns.album.id,
-               original_file_name: entry.client_name
-             }) do
-          {:ok, image} ->
-            {:ok, "/media/preview/#{image.album_id}/#{image.id}.webp"}
+    consume_uploaded_entries(socket, :images, fn meta, entry ->
+      case Gallery.upload_image(%{
+             file_path: meta.path,
+             album_id: socket.assigns.album.id,
+             original_file_name: entry.client_name
+           }) do
+        {:ok, image} ->
+          {:ok, "/media/preview/#{image.album_id}/#{image.id}.webp"}
 
-          {:error, reason} ->
-            {:error, reason}
-        end
-      end)
+        {:error, reason} ->
+          {:error, reason}
+      end
+    end)
 
-    {:noreply, update(socket, :uploaded_files, &(&1 ++ uploaded_files))}
+    {:noreply, update(socket, :album, &Ash.load!(&1, :images))}
   end
 
   defp assign_form(%{assigns: %{album: album}} = socket) do
