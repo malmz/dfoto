@@ -29,6 +29,10 @@ defmodule Dfoto.Gallery.Album do
         message "Album is already published"
       end
 
+      change atomic_update(:thumbnail_id, expr(first(images, field: :id))) do
+        where [attributes_absent(:thumbnail_id)]
+      end
+
       change set_attribute(:status, :published)
     end
 
@@ -93,7 +97,6 @@ defmodule Dfoto.Gallery.Album do
 
   relationships do
     has_many :images, Dfoto.Gallery.Image
-
-    has_one :thumbnail, Dfoto.Gallery.Image
+    belongs_to :thumbnail, Dfoto.Gallery.Image
   end
 end
