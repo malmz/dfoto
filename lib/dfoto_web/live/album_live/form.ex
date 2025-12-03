@@ -8,7 +8,8 @@ defmodule DfotoWeb.AlbumLive.Form do
     ~H"""
     <Layouts.app flash={@flash}>
       <.header>
-        {@page_title} <span :if={@album} class="badge badge-primary">{@album.status}</span>
+        {@page_title}
+        <span :if={@album} class={"badge #{badge_color(@album.status)}"}>{@album.status}</span>
         <:subtitle>Use this form to manage album records in your database.</:subtitle>
       </.header>
 
@@ -20,61 +21,129 @@ defmodule DfotoWeb.AlbumLive.Form do
       >
         <.input type="text" field={@form[:title]} />
         <.input type="textarea" field={@form[:description]} />
-        <.button phx-disable-with="Saving..." variant="primary">
-          Save Album
-        </.button>
-        <%= if @album do %>
-          <%= case @album.status do %>
-            <% :draft -> %>
-              <.button
-                type="button"
-                phx-click="publish"
-                phx-disable-with="Publishing..."
-                variant="warning"
-              >
-                Publish
-              </.button>
-            <% :published -> %>
-              <.button
-                type="button"
-                phx-click="unpublish"
-                phx-disable-with="Unpublishing..."
-                variant="warning"
-              >
-                Unpublish
-              </.button>
-            <% :archived -> %>
-              <.button
-                type="button"
-                phx-click="unarchive"
-                phx-disable-with="Unarchiving..."
-                variant="warning"
-              >
-                Unarchive
-              </.button>
-          <% end %>
-        <% end %>
       </.form>
 
-      <section phx-drop-target={@uploads.images.ref} class="">
-        <div :for={entry <- @uploads.images.entries} class="card shadow-sm">
-          <figure>
-            <.live_img_preview entry={entry} />
-          </figure>
-          <div class="card-body flex-row justify-center">
-            <progress value={entry.progress} max="100" class="progress">{entry.progress}% </progress>
-            <button
-              type="button"
-              phx-click="cancel-upload"
-              phx-value-ref={entry.ref}
-              aria-label="cancel"
-              class="btn btn-square"
-            >
-              <.icon name="hero-x-mark" />
-            </button>
-            <p :for={err <- upload_errors(@uploads.images, entry)} class="alert alert-danger">
-              {error_to_string(err)}
-            </p>
+      <div class="flex flex-wrap gap-1 mb-4 sm:justify-between">
+        <form id="upload-form" phx-change="validate_upload" phx-submit="save_upload" class="inline">
+          <label
+            for={@uploads.images.ref}
+            phx-drop-target={@uploads.images.ref}
+            class="btn btn-primary btn-block"
+          >
+            Upload image
+          </label>
+          <.live_file_input upload={@uploads.images} class="hidden" />
+        </form>
+
+        <div class="contents sm:block">
+          <.button form="album-form" phx-disable-with="Saving..." variant="primary">
+            Save Album
+          </.button>
+
+          <%= if @album do %>
+            <%= case @album.status do %>
+              <% :draft -> %>
+                <.button
+                  form="album-form"
+                  type="button"
+                  phx-click="publish"
+                  phx-disable-with="Publishing..."
+                  variant="warning"
+                >
+                  Publish
+                </.button>
+              <% :published -> %>
+                <.button
+                  form="album-form"
+                  type="button"
+                  phx-click="unpublish"
+                  phx-disable-with="Unpublishing..."
+                  variant="warning"
+                >
+                  Unpublish
+                </.button>
+              <% :archived -> %>
+                <.button
+                  form="album-form"
+                  type="button"
+                  phx-click="unarchive"
+                  phx-disable-with="Unarchiving..."
+                  variant="warning"
+                >
+                  Unarchive
+                </.button>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <section>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div
+            :for={image <- @album.images}
+            :if={@album}
+            data-thumbnail={@album.thumbnail_id == image.id}
+            class="card card-border bg-base-300 card-xs data-thumbnail:outline-2 outline-dashed outline-accent"
+          >
+            <figure class="bg-neutral-800">
+              <img src={image_path(image)} />
+            </figure>
+            <div class="card-body">
+              <div class="card-actions justify-between">
+                <div>
+                  <.button
+                    navigate={~p"/admin/albums/#{@album.id}/#{image.id}"}
+                    variant="primary"
+                    size="xs"
+                  >
+                    Edit
+                  </.button>
+                  <%= if @album.thumbnail_id == image.id do %>
+                    <.button
+                      variant="primary"
+                      size="xs"
+                      disabled
+                    >
+                      Thumb set
+                    </.button>
+                  <% else %>
+                    <.button
+                      phx-click="set-thumbnail"
+                      phx-value-image_id={image.id}
+                      variant="primary"
+                      size="xs"
+                    >
+                      Set thumb
+                    </.button>
+                  <% end %>
+                </div>
+                <button class="btn btn-warning btn-xs">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          <div :for={entry <- @uploads.images.entries} class="card card-border">
+            <figure>
+              <.live_img_preview entry={entry} />
+            </figure>
+            <div class="card-action">
+              <progress value={entry.progress} max="100" class="progress progress-primary">
+                {entry.progress}%
+              </progress>
+              <button
+                type="button"
+                phx-click="cancel-upload"
+                phx-value-ref={entry.ref}
+                aria-label="cancel"
+                class="btn btn-square btn-warning"
+              >
+                <.icon name="hero-x-mark" />
+              </button>
+              <p :for={err <- upload_errors(@uploads.images, entry)} class="alert alert-danger">
+                {error_to_string(err)}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -83,16 +152,6 @@ defmodule DfotoWeb.AlbumLive.Form do
           {error_to_string(err)}
         </p>
       </section>
-      <form id="upload-form" phx-submit="save_upload" phx-change="validate_upload">
-        <.live_file_input upload={@uploads.images} class="file-input" />
-        <.button variant="primary">Upload</.button>
-      </form>
-
-      <div :if={@album}>
-        <figure :for={image <- @album.images}>
-          <img src={image_path(image)} />
-        </figure>
-      </div>
     </Layouts.app>
     """
   end
@@ -119,12 +178,44 @@ defmodule DfotoWeb.AlbumLive.Form do
      |> assign(album: album)
      |> assign(:page_title, page_title)
      |> assign(:uploaded_files, [])
-     |> allow_upload(:images, accept: ~w(.jpg .jpeg .png), max_entries: 50)
+     |> allow_upload(:images,
+       accept: ~w(.jpg .jpeg .png),
+       max_entries: 50,
+       auto_upload: true,
+       progress: &handle_progress/3
+     )
      |> assign_form()}
   end
 
   defp return_to("show"), do: "show"
   defp return_to(_), do: "index"
+
+  defp handle_progress(:images, entry, socket) do
+    if entry.done? do
+      consume_uploaded_entry(socket, entry, fn %{} = meta ->
+        case Gallery.upload_image(%{
+               file_path: meta.path,
+               album_id: socket.assigns.album.id,
+               original_file_name: entry.client_name
+             }) do
+          {:ok, image} ->
+            {:ok, "/media/thumbnail/#{image.album_id}/#{image.id}.webp"}
+
+          {:error, reason} ->
+            {:error, reason}
+        end
+      end)
+
+      socket =
+        socket
+        |> update(:album, &Ash.load!(&1, :images))
+        |> put_flash(:info, "uploaded file #{entry.client_name}")
+
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
 
   @impl Phoenix.LiveView
   def handle_event("validate", %{"album" => album_params}, socket) do
@@ -213,27 +304,22 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("set-thumbnail", %{"image_id" => image_id}, socket) do
+    socket =
+      socket
+      |> update(:album, &Gallery.set_thumbnail!(&1, image_id))
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
   def handle_event("validate_upload", _params, socket) do
     {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_event("save_upload", _params, socket) do
-    consume_uploaded_entries(socket, :images, fn meta, entry ->
-      case Gallery.upload_image(%{
-             file_path: meta.path,
-             album_id: socket.assigns.album.id,
-             original_file_name: entry.client_name
-           }) do
-        {:ok, image} ->
-          {:ok, "/media/preview/#{image.album_id}/#{image.id}.webp"}
-
-        {:error, reason} ->
-          {:error, reason}
-      end
-    end)
-
-    {:noreply, update(socket, :album, &Ash.load!(&1, :images))}
+    {:noreply, socket}
   end
 
   defp assign_form(%{assigns: %{album: album}} = socket) do
@@ -257,7 +343,11 @@ defmodule DfotoWeb.AlbumLive.Form do
   defp return_path("show", album), do: ~p"/albums/#{album.id}"
 
   defp image_path(%{id: image_id, album_id: album_id}),
-    do: "/media/preview/#{album_id}/#{image_id}.webp"
+    do: "/media/thumbnail/#{album_id}/#{image_id}.webp"
+
+  defp badge_color(:published), do: "badge-success"
+  defp badge_color(:draft), do: "badge-primary"
+  defp badge_color(:archived), do: "badge-danger"
 
   defp error_to_string(:too_large), do: "Too large"
   defp error_to_string(:too_many_files), do: "You have selected too many files"
