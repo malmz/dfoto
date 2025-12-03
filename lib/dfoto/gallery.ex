@@ -10,6 +10,7 @@ defmodule Dfoto.Gallery do
       define :unpublish_album, action: :unpublish
       define :archive_album, action: :archive
       define :unarchive_album, action: :unarchive
+      define :set_thumbnail, args: [:image_id], action: :thumbnail
     end
 
     resource Dfoto.Gallery.Image do

@@ -67,6 +67,13 @@ defmodule Dfoto.Gallery.Album do
         message "Album is not archived"
       end
     end
+
+    update :thumbnail do
+      accept []
+      argument :image_id, :uuid
+
+      change set_attribute(:thumbnail_id, arg(:image_id))
+    end
   end
 
   attributes do
