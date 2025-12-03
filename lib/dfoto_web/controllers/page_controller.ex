@@ -20,7 +20,7 @@ defmodule DfotoWeb.PageController do
     |> render(:show)
   end
 
-  def image(conn, %{"album_id" => album_id, "image_id" => image_id}) do
+  def image(conn, %{"album_id" => _album_id, "image_id" => image_id}) do
     image =
       Ash.get!(Gallery.Image, image_id)
 
