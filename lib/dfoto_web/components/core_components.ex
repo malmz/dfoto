@@ -88,9 +88,10 @@ defmodule DfotoWeb.CoreComponents do
       <.button phx-click="go" variant="primary">Send!</.button>
       <.button navigate={~p"/"}>Home</.button>
   """
-  attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
+  attr :rest, :global, include: ~w(href navigate patch method download name value disabled form)
   attr :class, :string
   attr :variant, :string, values: ~w(primary warning)
+  attr :size, :string, values: ~w(xs sm md lg xl)
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
@@ -100,9 +101,19 @@ defmodule DfotoWeb.CoreComponents do
       nil => "btn-primary btn-soft"
     }
 
+    sizes = %{
+      "xs" => "btn-xs",
+      "sm" => "btn-sm",
+      "md" => "btn-md",
+      "lg" => "btn-lg",
+      "xl" => "btn-xl",
+      nil => ""
+    }
+
     assigns =
-      assign_new(assigns, :class, fn ->
-        ["btn", Map.fetch!(variants, assigns[:variant])]
+      assigns
+      |> assign_new(:class, fn ->
+        ["btn", Map.fetch!(variants, assigns[:variant]), Map.fetch!(sizes, assigns[:size])]
       end)
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
