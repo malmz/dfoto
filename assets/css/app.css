@@ -70,3 +70,9 @@
 }
 
 /* This file is for your main application CSS */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
