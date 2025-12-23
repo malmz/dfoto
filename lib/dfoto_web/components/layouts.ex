@@ -36,19 +36,38 @@ defmodule DfotoWeb.Layouts do
   def app(assigns) do
     ~H"""
     <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
+      <div class="navbar-start">
         <a href="/" class="flex-1 flex w-fit items-center gap-2">
           <img src={~p"/images/icon.svg"} width="36" class="-mt-1" />
           <span class="text-lg font-bold text-orange-500">DFoto</span>
         </a>
       </div>
-      <nav class="flex-none">
+      <form class="navbar-center" method="get" action="/">
+        <label class="input">
+          <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              stroke-width="2.5"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </g>
+          </svg>
+          <input type="search" class="grow" placeholder="Sök..." name="q" id="search" />
+          <kbd class="kbd kbd-sm">⌘</kbd>
+          <kbd class="kbd kbd-sm">K</kbd>
+        </label>
+      </form>
+      <nav class="navbar-end">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
+            <a href="/" class="btn btn-ghost">Bilder</a>
           </li>
           <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
+            <a href="/about" class="btn btn-ghost">Om oss</a>
           </li>
           <li>
             <.theme_toggle />
@@ -62,9 +81,25 @@ defmodule DfotoWeb.Layouts do
       </nav>
     </header>
 
-    <main class="px-4 py-8 sm:px-6 lg:px-8">
+    <main class="px-4 py-8 sm:px-6 lg:px-8 grow">
       {render_slot(@inner_block)}
     </main>
+
+    <footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+      <aside>
+        <img src="/images/icon.svg" width="50" height="50" />
+        <p>
+          <span class="font-bold">DFoto</span> <br /> Datateknologsektionens Fotoförening
+        </p>
+        <p>Copyright © {Date.utc_today().year} - All right reserved</p>
+      </aside>
+      <nav>
+        <h6 class="footer-title">Links</h6>
+        <a class="link link-hover" href="https://github.com/dtekcth/dfoto">Github</a>
+        <a class="link link-hover" href="mailto:dfoto@dtek.se">dfoto@dtek.se</a>
+        <a class="link link-hover" href="/admin/albums">Logga in</a>
+      </nav>
+    </footer>
 
     <.flash_group flash={@flash} />
     """
