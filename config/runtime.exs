@@ -72,12 +72,11 @@ if config_env() == :prod do
       System.get_env("TOKEN_SIGNING_SECRET") ||
         raise("Missing environment variable `TOKEN_SIGNING_SECRET`!")
 
-  config :dfoto, Dfoto.OidccConfigProvider,
-    issuer: System.get_env("DFOTO_OIDCC_CONFIG_PROVIDER_ISSUER")
-
-  config :dfoto, DfotoWeb.AuthController,
-    client_id: System.get_env("DFOTO_OIDCC_CONFIG_PROVIDER_CLIENT_ID"),
-    client_secret: System.fetch_env!("DFOTO_OIDCC_CONFIG_PROVIDER_CLIENT_SECRET")
+  config :dfoto, :authentik,
+    issuer: System.get_env("DFOTO_AUTH_AUTHENTIK_ISSUER"),
+    client_id: System.get_env("DFOTO_AUTH_AUTHENTIK_CLIENT_ID"),
+    client_secret: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_CLIENT_SECRET"),
+    redirect_uri: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_REDIRECT_URI")
 
   # ## SSL Support
   #
