@@ -66,5 +66,7 @@ defmodule Dfoto.Gallery.Image do
     calculate :photographer_name,
               :string,
               expr(photographer_guest_name || photographer.name || "Unknown")
+
+    calculate :extension, :string, {Dfoto.Calculations.FileExt, [key: :filename]}
   end
 end
