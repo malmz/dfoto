@@ -1,4 +1,7 @@
 defmodule Dfoto.Gallery.Image do
+  require Ash.Resource.Change.Builtins
+  require OK
+  alias Dfoto.Gallery.Paths
   alias Dfoto.Gallery.UploadReactor
 
   use Ash.Resource,
@@ -11,7 +14,7 @@ defmodule Dfoto.Gallery.Image do
   end
 
   actions do
-    defaults [:read, :destroy, update: :*]
+    defaults [:read, update: :*]
 
     create :create do
       accept [:filename, :taken_at]
@@ -28,6 +31,23 @@ defmodule Dfoto.Gallery.Image do
 
       run UploadReactor
     end
+
+    destroy :destroy do
+      accept []
+      require_atomic? false
+
+      change after_action(fn changeset, image ->
+               with :ok <- File.rm(Paths.image_path(image.album_id, image.id, image.filename)),
+                    :ok <- File.rm(Paths.preview_path(image.album_id, image.id)),
+                    :ok <- File.rm(Paths.thumbnail_path(image.album_id, image.id)) do
+                 {:ok, image}
+               end
+             end)
+    end
+  end
+
+  changes do
+    change optimistic_lock(:version), on: [:create, :update, :destroy]
   end
 
   validations do
@@ -46,6 +66,11 @@ defmodule Dfoto.Gallery.Image do
     attribute :taken_at, :datetime do
       allow_nil? false
       default &DateTime.utc_now/0
+    end
+
+    attribute :version, :integer do
+      allow_nil? false
+      default 1
     end
 
     create_timestamp :created_at
