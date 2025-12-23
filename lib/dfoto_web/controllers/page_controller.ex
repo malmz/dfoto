@@ -12,8 +12,7 @@ defmodule DfotoWeb.PageController do
 
   def show(conn, %{"album_id" => album_id}) do
     album =
-      Ash.get!(Gallery.Album, album_id)
-      |> Ash.load!(:images)
+      Ash.get!(Gallery.Album, album_id, load: [:images])
 
     conn
     |> assign(:album, album)
