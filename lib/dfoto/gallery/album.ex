@@ -70,6 +70,18 @@ defmodule Dfoto.Gallery.Album do
 
       change set_attribute(:thumbnail_id, arg(:image_id))
     end
+
+    update :remove_image do
+      accept []
+      require_atomic? false
+      argument :image_id, :uuid
+
+      change manage_relationship(:image_id, :images, type: :remove)
+    end
+  end
+
+  changes do
+    change optimistic_lock(:version), on: [:create, :update, :destroy]
   end
 
   attributes do
@@ -96,6 +108,11 @@ defmodule Dfoto.Gallery.Album do
       default &DateTime.utc_now/0
       match_other_defaults? true
       public? true
+    end
+
+    attribute :version, :integer do
+      allow_nil? false
+      default 1
     end
 
     create_timestamp :created_at
