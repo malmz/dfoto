@@ -1,20 +1,17 @@
 defmodule Dfoto.Gallery.ThumbnailReactor do
+  alias Dfoto.Gallery.Paths
   use Reactor, extensions: [Reactor.File]
   use OK.Pipe
 
-  @folder_name "thumbnail"
-
-  input :base_path
   input :album_id
   input :image_id
   input :original_path
 
   step :folder_path do
-    argument :base_path, input(:base_path)
     argument :album_id, input(:album_id)
 
-    run fn %{base_path: base_path, album_id: album_id} ->
-      {:ok, Path.join([base_path, @folder_name, album_id])}
+    run fn %{album_id: album_id} ->
+      {:ok, Paths.thumbnail_path(album_id)}
     end
   end
 
@@ -23,11 +20,11 @@ defmodule Dfoto.Gallery.ThumbnailReactor do
   end
 
   step :destination_path do
-    argument :base, result(:folder_path)
-    argument :image, input(:image_id)
+    argument :album_id, input(:album_id)
+    argument :image_id, input(:image_id)
 
-    run fn %{base: base, image: image} ->
-      {:ok, Path.join(base, "#{image}.webp")}
+    run fn %{album_id: album_id, image_id: image_id} ->
+      {:ok, Paths.thumbnail_path(album_id, image_id)}
     end
   end
 
