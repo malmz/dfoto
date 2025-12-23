@@ -27,4 +27,8 @@ defmodule DfotoWeb.PageController do
     |> assign(:image, image)
     |> render(:image)
   end
+
+  def about(conn, _params) do
+    render(conn, :about)
+  end
 end
