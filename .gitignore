@@ -40,3 +40,4 @@ npm-debug.log
 /config/secrets.exs
 
 .DS_Store
+.env*
