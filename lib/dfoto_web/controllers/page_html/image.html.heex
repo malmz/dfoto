@@ -1,8 +1,40 @@
 <Layouts.app flash={@flash}>
-  <main>
-    <figure>
-      <img src={"/media/preview/#{@image.album_id}/#{@image.id}.webp"} />
-      <figcaption>{@image.filename}</figcaption>
-    </figure>
-  </main>
+  <div class="grid grid-cols-3 gap-4">
+    <img
+      src={"/media/preview/#{@image.album_id}/#{@image.id}.webp"}
+      class="col-span-2 max-h-[80vh] object-contain mx-auto"
+    />
+    <div class="card card-border bg-base-200 shadow-sm basis-1/3">
+      <div class="card-body">
+        <div>
+          <span class="font-bold">Fotograf:</span> {@image.photographer_name}
+        </div>
+        <div><span class="font-bold">Filnamn:</span> {@image.filename}</div>
+        <div>
+          <.button
+            variant="primary"
+            href={"/media/images/#{@image.album_id}/#{@image.id}#{@image.extension}"}
+          >
+            Öppna fullstorlek
+          </.button>
+        </div>
+        <div class="card-actions">
+          <.button
+            variant="primary"
+            href={@image.order.prev_id && ~p"/#{@image.album_id}/#{@image.order.prev_id}"}
+            disabled={!@image.order.prev_id}
+          >
+            Föregående
+          </.button>
+          <.button
+            variant="primary"
+            href={@image.order.next_id && ~p"/#{@image.album_id}/#{@image.order.next_id}"}
+            disabled={!@image.order.next_id}
+          >
+            Nästa
+          </.button>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layouts.app>
