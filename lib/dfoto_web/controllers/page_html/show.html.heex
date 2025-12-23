@@ -1,8 +1,8 @@
 <Layouts.app flash={@flash}>
-  <main class="space-y-8">
+  <section class="space-y-8">
     <div class="max-w-prose mx-auto space-y-8">
       <h1 class="text-2xl font-bold underline underline-offset-16 decoration-4 decoration-primary">
-        {@album.title}
+        {@album.title} - <time>{DateTime.to_date(@album.start_at)}</time>
       </h1>
       <p>{@album.description}</p>
     </div>
@@ -13,5 +13,5 @@
         </a>
       </li>
     </ul>
-  </main>
+  </section>
 </Layouts.app>
