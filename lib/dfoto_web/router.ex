@@ -31,16 +31,14 @@ defmodule DfotoWeb.Router do
 
     live "/albums", Index, :index
     live "/albums/new", Form, :new
-    live "/albums/:id/edit", Form, :edit
-
-    live "/albums/:id", Show, :show
-    live "/albums/:id/show/edit", Show, :edit
+    live "/albums/:id", Form, :edit
   end
 
   scope "/", DfotoWeb do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/about", PageController, :about
     get "/:album_id", PageController, :show
     get "/:album_id/:image_id", PageController, :image
   end
