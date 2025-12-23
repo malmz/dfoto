@@ -22,7 +22,7 @@ defmodule DfotoWeb.PageController do
 
   def image(conn, %{"album_id" => _album_id, "image_id" => image_id}) do
     image =
-      Ash.get!(Gallery.Image, image_id)
+      Ash.get!(Gallery.Image, image_id, load: [:photographer_name, :extension, :order])
 
     conn
     |> assign(:image, image)
