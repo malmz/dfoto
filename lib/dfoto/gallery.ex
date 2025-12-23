@@ -16,5 +16,9 @@ defmodule Dfoto.Gallery do
     resource Dfoto.Gallery.Image do
       define :upload_image, action: :upload
     end
+
+    resource Dfoto.Gallery.Legacy.Album
+    resource Dfoto.Gallery.Legacy.Image
+    resource Dfoto.Gallery.OrderedImage
   end
 end

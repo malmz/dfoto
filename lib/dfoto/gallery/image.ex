@@ -85,6 +85,10 @@ defmodule Dfoto.Gallery.Image do
     has_one :thumbnail_for, Dfoto.Gallery.Album do
       destination_attribute :thumbnail_id
     end
+
+    has_one :order, Dfoto.Gallery.OrderedImage do
+      destination_attribute :id
+    end
   end
 
   calculations do
