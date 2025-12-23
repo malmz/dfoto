@@ -33,10 +33,6 @@ defmodule Dfoto.Gallery.Album do
         where [attributes_absent(:thumbnail_id)]
       end
 
-      validate attributes_present(:thumbnail_id) do
-        before_action? true
-      end
-
       change set_attribute(:status, :published)
     end
 
