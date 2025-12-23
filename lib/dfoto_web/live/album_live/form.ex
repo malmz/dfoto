@@ -24,7 +24,7 @@ defmodule DfotoWeb.AlbumLive.Form do
       </.form>
 
       <div class="flex flex-wrap gap-1 mb-4 sm:justify-between">
-        <form id="upload-form" phx-change="validate_upload" phx-submit="save_upload" class="inline">
+        <form id="upload-form" phx-change="validate-upload" phx-submit="save-upload" class="inline">
           <label
             for={@uploads.images.ref}
             phx-drop-target={@uploads.images.ref}
@@ -98,28 +98,30 @@ defmodule DfotoWeb.AlbumLive.Form do
                   >
                     Edit
                   </.button>
-                  <%= if @album.thumbnail_id == image.id do %>
-                    <.button
-                      variant="primary"
-                      size="xs"
-                      disabled
-                    >
-                      Thumb set
-                    </.button>
-                  <% else %>
-                    <.button
-                      phx-click="set-thumbnail"
-                      phx-value-image_id={image.id}
-                      variant="primary"
-                      size="xs"
-                    >
-                      Set thumb
-                    </.button>
-                  <% end %>
+                  <.button
+                    variant="primary"
+                    size="xs"
+                    phx-click="set-thumbnail"
+                    phx-value-image_id={image.id}
+                    disabled={@album.thumbnail_id == image.id}
+                  >
+                    {if @album.thumbnail_id == image.id do
+                      "Thumb set"
+                    else
+                      "Set thumb"
+                    end}
+                  </.button>
                 </div>
-                <button class="btn btn-warning btn-xs">
+                <.button
+                  variant="warning"
+                  size="xs"
+                  phx-click="delete-image"
+                  phx-value-image_id={image.id}
+                  data-confirm="Are you sure?"
+                  disabled={@album.thumbnail_id == image.id}
+                >
                   Delete
-                </button>
+                </.button>
               </div>
             </div>
           </div>
@@ -313,12 +315,23 @@ defmodule DfotoWeb.AlbumLive.Form do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("validate_upload", _params, socket) do
+  def handle_event("validate-upload", _params, socket) do
     {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save_upload", _params, socket) do
+  def handle_event("save-upload", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("delete-image", %{"image_id" => image_id}, socket) do
+    
+    Gallery.Image
+    |> Ash.get!(image_id)
+    |> Ash.Changeset.for_destroy(:destroy)
+    |> Ash.destroy!()
+
     {:noreply, socket}
   end
 
@@ -338,9 +351,6 @@ defmodule DfotoWeb.AlbumLive.Form do
 
     assign(socket, form: to_form(form))
   end
-
-  defp return_path("index", _album), do: ~p"/albums"
-  defp return_path("show", album), do: ~p"/albums/#{album.id}"
 
   defp image_path(%{id: image_id, album_id: album_id}),
     do: "/media/thumbnail/#{album_id}/#{image_id}.webp"
