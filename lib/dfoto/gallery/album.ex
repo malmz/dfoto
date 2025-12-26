@@ -6,6 +6,13 @@ defmodule Dfoto.Gallery.Album do
   postgres do
     table "albums"
     repo Dfoto.Repo
+
+    custom_statements do
+      statement :search_index do
+        up "CREATE INDEX albums_search_idx ON albums USING GIN (to_tsvector('swedish_hunspell', title || ' ' || description));"
+        down "DROP INDEX albums_search_idx;"
+      end
+    end
   end
 
   actions do
@@ -19,6 +26,22 @@ defmodule Dfoto.Gallery.Album do
 
     read :published do
       filter expr(status == :published)
+      pagination required?: false, offset?: true, keyset?: true
+    end
+
+    read :search do
+      argument :query, :string
+
+      filter expr(status == :published)
+
+      filter expr(
+               fragment(
+                 "to_tsvector('swedish_hunspell', title || ' ' || description) @@ websearch_to_tsquery('swedish_hunspell', ?)",
+                 ^arg(:query)
+               )
+             )
+
+      prepare build(sort: [search_rank: {%{search_query: arg(:query)}, :asc}])
       pagination required?: false, offset?: true, keyset?: true
     end
 
@@ -122,5 +145,18 @@ defmodule Dfoto.Gallery.Album do
   relationships do
     has_many :images, Dfoto.Gallery.Image
     belongs_to :thumbnail, Dfoto.Gallery.Image
+  end
+
+  calculations do
+    calculate :search_rank,
+              :float,
+              expr(
+                fragment(
+                  "ts_rank_cd(to_tsvector('swedish_hunspell', title || ' ' || description), websearch_to_tsquery('swedish_hunspell', ?))",
+                  ^arg(:search_query)
+                )
+              ) do
+      argument :search_query, :string
+    end
   end
 end

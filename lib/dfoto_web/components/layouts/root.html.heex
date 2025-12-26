@@ -33,6 +33,10 @@
         window.addEventListener("phx:set-theme", (e) => setTheme(e.target.dataset.phxTheme));
       })();
     </script>
+
+    <script>
+      window.addEventListener("keydown", (e) => e.key === "k" && e.metaKey && window.search.focus())
+    </script>
   </head>
   <body>
     {@inner_content}

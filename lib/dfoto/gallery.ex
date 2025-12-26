@@ -5,7 +5,7 @@ defmodule Dfoto.Gallery do
     resource Dfoto.Gallery.Album do
       define :all_albums, action: :read
       define :published_albums, action: :published
-
+      define :search_albums, args: [:query], action: :search
       define :publish_album, action: :publish
       define :unpublish_album, action: :unpublish
       define :archive_album, action: :archive

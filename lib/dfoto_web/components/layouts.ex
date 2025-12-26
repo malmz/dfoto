@@ -42,25 +42,27 @@ defmodule DfotoWeb.Layouts do
           <span class="text-lg font-bold text-orange-500">DFoto</span>
         </a>
       </div>
-      <form class="navbar-center" method="get" action="/">
-        <label class="input">
-          <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <g
-              stroke-linejoin="round"
-              stroke-linecap="round"
-              stroke-width="2.5"
-              fill="none"
-              stroke="currentColor"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.3-4.3"></path>
-            </g>
-          </svg>
-          <input type="search" class="grow" placeholder="Sök..." name="q" id="search" />
-          <kbd class="kbd kbd-sm">⌘</kbd>
-          <kbd class="kbd kbd-sm">K</kbd>
-        </label>
-      </form>
+      <search class="navbar-center">
+        <form method="get" action="/">
+          <label class="input">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <g
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="2.5"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input type="search" class="grow" placeholder="Sök..." name="q" id="search" />
+            <kbd class="kbd kbd-sm">⌘</kbd>
+            <kbd class="kbd kbd-sm">K</kbd>
+          </label>
+        </form>
+      </search>
       <nav class="navbar-end">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
