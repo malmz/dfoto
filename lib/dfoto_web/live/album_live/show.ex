@@ -13,7 +13,7 @@ defmodule DfotoWeb.AlbumLive.Show do
           <.button navigate={~p"/admin/albums"}>
             <.icon name="hero-arrow-left" />
           </.button>
-          <.button variant="primary" navigate={~p"/admin/albums/#{@album}/edit?return_to=show"}>
+          <.button variant="primary" navigate={~p"/admin/albums/#{@album}"}>
             <.icon name="hero-pencil-square" /> Edit Album
           </.button>
         </:actions>
