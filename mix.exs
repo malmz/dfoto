@@ -83,7 +83,9 @@ defmodule Dfoto.MixProject do
       {:reactor_file, "~> 0.18.3"},
       {:spark, "~> 2.3.3", override: true},
       {:image, "~> 0.62.1"},
-      {:ok, "~> 2.3"}
+      {:ok, "~> 2.3"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
