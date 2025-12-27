@@ -2,6 +2,7 @@ defmodule DfotoWeb.AlbumLive.Form do
   require Logger
   alias Dfoto.Gallery
   use DfotoWeb, :live_view
+  use OK.Pipe
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -192,32 +193,25 @@ defmodule DfotoWeb.AlbumLive.Form do
   defp return_to("show"), do: "show"
   defp return_to(_), do: "index"
 
-  defp handle_progress(:images, entry, socket) do
-    if entry.done? do
-      consume_uploaded_entry(socket, entry, fn %{} = meta ->
-        case Gallery.upload_image(%{
-               file_path: meta.path,
-               album_id: socket.assigns.album.id,
-               original_file_name: entry.client_name
-             }) do
-          {:ok, image} ->
-            {:ok, "/media/thumbnail/#{image.album_id}/#{image.id}.webp"}
+  defp handle_progress(:images, %{done?: true} = entry, socket) do
+    consume_uploaded_entry(socket, entry, fn %{} = meta ->
+      Gallery.upload_image(%{
+        file_path: meta.path,
+        album_id: socket.assigns.album.id,
+        original_file_name: entry.client_name
+      })
+      ~>> then(&"/media/thumbnail/#{&1.album_id}/#{&1.id}.webp")
+    end)
 
-          {:error, reason} ->
-            {:error, reason}
-        end
-      end)
+    socket =
+      socket
+      |> update(:album, &Ash.load!(&1, :images))
+      |> put_flash(:info, "uploaded file #{entry.client_name}")
 
-      socket =
-        socket
-        |> update(:album, &Ash.load!(&1, :images))
-        |> put_flash(:info, "uploaded file #{entry.client_name}")
-
-      {:noreply, socket}
-    else
-      {:noreply, socket}
-    end
+    {:noreply, socket}
   end
+
+  defp handle_progress(:images, _entry, socket), do: {:noreply, socket}
 
   @impl Phoenix.LiveView
   def handle_event("validate", %{"album" => album_params}, socket) do
@@ -226,7 +220,7 @@ defmodule DfotoWeb.AlbumLive.Form do
 
   @impl Phoenix.LiveView
   def handle_event("save", %{"album" => album_params}, socket) do
-    case dbg(AshPhoenix.Form.submit(socket.assigns.form, params: album_params)) do
+    case AshPhoenix.Form.submit(socket.assigns.form, params: album_params) do
       {:ok, album} ->
         # notify_parent({:saved, album})
         album = Ash.load!(album, :images)
@@ -326,7 +320,6 @@ defmodule DfotoWeb.AlbumLive.Form do
 
   @impl Phoenix.LiveView
   def handle_event("delete-image", %{"image_id" => image_id}, socket) do
-    
     Gallery.Image
     |> Ash.get!(image_id)
     |> Ash.Changeset.for_destroy(:destroy)
