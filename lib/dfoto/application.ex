@@ -1,4 +1,4 @@
-defmodule Dfoto.Application do
+defmodule DFoto.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -10,22 +10,22 @@ defmodule Dfoto.Application do
     children = [
       {Oidcc.ProviderConfiguration.Worker,
        %{
-         name: Dfoto.AuthentikOidcProvider,
+         name: DFoto.AuthentikOidcProvider,
          issuer: Application.fetch_env!(:dfoto, :authentik)[:issuer]
        }},
-      DfotoWeb.Telemetry,
-      Dfoto.Repo,
+      DFotoWeb.Telemetry,
+      DFoto.Repo,
       {DNSCluster, query: Application.get_env(:dfoto, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Dfoto.PubSub},
-      # Start a worker by calling: Dfoto.Worker.start_link(arg)
-      # {Dfoto.Worker, arg},
+      {Phoenix.PubSub, name: DFoto.PubSub},
+      # Start a worker by calling: DFoto.Worker.start_link(arg)
+      # {DFoto.Worker, arg},
       # Start to serve requests, typically the last entry
-      DfotoWeb.Endpoint
+      DFotoWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Dfoto.Supervisor]
+    opts = [strategy: :one_for_one, name: DFoto.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
@@ -33,7 +33,7 @@ defmodule Dfoto.Application do
   # whenever the application is updated.
   @impl true
   def config_change(changed, _new, removed) do
-    DfotoWeb.Endpoint.config_change(changed, removed)
+    DFotoWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

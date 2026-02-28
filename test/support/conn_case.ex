@@ -1,4 +1,4 @@
-defmodule DfotoWeb.ConnCase do
+defmodule DFotoWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule DfotoWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use DfotoWeb.ConnCase, async: true`, although
+  by setting `use DFotoWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,19 +20,19 @@ defmodule DfotoWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint DfotoWeb.Endpoint
+      @endpoint DFotoWeb.Endpoint
 
-      use DfotoWeb, :verified_routes
+      use DFotoWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import DfotoWeb.ConnCase
+      import DFotoWeb.ConnCase
     end
   end
 
   setup tags do
-    Dfoto.DataCase.setup_sandbox(tags)
+    DFoto.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

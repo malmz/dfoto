@@ -1,11 +1,11 @@
-defmodule DfotoWeb.Router do
-  use DfotoWeb, :router
+defmodule DFotoWeb.Router do
+  use DFotoWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {DfotoWeb.Layouts, :root}
+    plug :put_root_layout, html: {DFotoWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -18,7 +18,7 @@ defmodule DfotoWeb.Router do
     plug :fetch_session
   end
 
-  scope "/auth", DfotoWeb do
+  scope "/auth", DFotoWeb do
     pipe_through :browser
 
     get "/authorize", AuthController, :authorize
@@ -26,7 +26,7 @@ defmodule DfotoWeb.Router do
     post "/callback", AuthController, :callback
   end
 
-  scope "/admin", DfotoWeb.AlbumLive do
+  scope "/admin", DFotoWeb.AlbumLive do
     pipe_through :browser
 
     live "/albums", Index, :index
@@ -34,7 +34,7 @@ defmodule DfotoWeb.Router do
     live "/albums/:id", Form, :edit
   end
 
-  scope "/", DfotoWeb do
+  scope "/", DFotoWeb do
     pipe_through :browser
 
     get "/", PageController, :index
@@ -44,7 +44,7 @@ defmodule DfotoWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DfotoWeb do
+  # scope "/api", DFotoWeb do
   #   pipe_through :api
   # end
 
@@ -60,7 +60,7 @@ defmodule DfotoWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: DfotoWeb.Telemetry
+      live_dashboard "/dashboard", metrics: DFotoWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end

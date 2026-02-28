@@ -1,4 +1,4 @@
-defmodule Dfoto.Repo do
+defmodule DFoto.Repo do
   use AshPostgres.Repo,
     otp_app: :dfoto
 

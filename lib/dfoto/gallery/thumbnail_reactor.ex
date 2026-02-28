@@ -1,5 +1,5 @@
-defmodule Dfoto.Gallery.ThumbnailReactor do
-  alias Dfoto.Gallery.Paths
+defmodule DFoto.Gallery.ThumbnailReactor do
+  alias DFoto.Gallery.Paths
   use Reactor, extensions: [Reactor.File]
   use OK.Pipe
 

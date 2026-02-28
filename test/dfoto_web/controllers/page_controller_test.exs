@@ -1,5 +1,5 @@
-defmodule DfotoWeb.PageControllerTest do
-  use DfotoWeb.ConnCase
+defmodule DFotoWeb.PageControllerTest do
+  use DFotoWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

@@ -140,7 +140,7 @@
     "global": null,
     "strategy": null
   },
-  "repo": "Elixir.Dfoto.Repo",
+  "repo": "Elixir.DFoto.Repo",
   "schema": null,
   "table": "albums"
 }

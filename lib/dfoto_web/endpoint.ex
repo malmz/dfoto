@@ -1,4 +1,4 @@
-defmodule DfotoWeb.Endpoint do
+defmodule DFotoWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dfoto
 
   # The session will be stored in the cookie and signed,
@@ -24,7 +24,7 @@ defmodule DfotoWeb.Endpoint do
     at: "/",
     from: :dfoto,
     gzip: not code_reloading?,
-    only: DfotoWeb.static_paths()
+    only: DFotoWeb.static_paths()
 
   plug Plug.Static,
     at: "/media",
@@ -56,5 +56,5 @@ defmodule DfotoWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug DfotoWeb.Router
+  plug DFotoWeb.Router
 end

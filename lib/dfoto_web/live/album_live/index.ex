@@ -1,5 +1,5 @@
-defmodule DfotoWeb.AlbumLive.Index do
-  use DfotoWeb, :live_view
+defmodule DFotoWeb.AlbumLive.Index do
+  use DFotoWeb, :live_view
 
   @impl true
   def render(assigns) do
@@ -51,12 +51,12 @@ defmodule DfotoWeb.AlbumLive.Index do
      socket
      |> assign(:page_title, "Listing Albums")
      |> assign_new(:current_user, fn -> nil end)
-     |> stream(:albums, Ash.read!(Dfoto.Gallery.Album, actor: socket.assigns[:current_user]))}
+     |> stream(:albums, Ash.read!(DFoto.Gallery.Album, actor: socket.assigns[:current_user]))}
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    album = Ash.get!(Dfoto.Gallery.Album, id, actor: socket.assigns.current_user)
+    album = Ash.get!(DFoto.Gallery.Album, id, actor: socket.assigns.current_user)
     Ash.destroy!(album, actor: socket.assigns.current_user)
 
     {:noreply, stream_delete(socket, :albums, album)}

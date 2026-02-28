@@ -1,7 +1,7 @@
-defmodule Dfoto.Accounts do
+defmodule DFoto.Accounts do
   use Ash.Domain, otp_app: :dfoto
 
   resources do
-    resource Dfoto.Accounts.User
+    resource DFoto.Accounts.User
   end
 end

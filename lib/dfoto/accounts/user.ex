@@ -1,12 +1,12 @@
-defmodule Dfoto.Accounts.User do
+defmodule DFoto.Accounts.User do
   use Ash.Resource,
     otp_app: :dfoto,
-    domain: Dfoto.Accounts,
+    domain: DFoto.Accounts,
     data_layer: AshPostgres.DataLayer
 
   postgres do
     table "users"
-    repo Dfoto.Repo
+    repo DFoto.Repo
   end
 
   actions do

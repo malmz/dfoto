@@ -1,11 +1,11 @@
-defmodule Dfoto.Gallery.Legacy.Image do
+defmodule DFoto.Gallery.Legacy.Image do
   use Ash.Resource,
-    domain: Dfoto.Gallery,
+    domain: DFoto.Gallery,
     data_layer: AshPostgres.DataLayer
 
   postgres do
     table "legacy_images"
-    repo Dfoto.Repo
+    repo DFoto.Repo
   end
 
   attributes do
@@ -16,7 +16,7 @@ defmodule Dfoto.Gallery.Legacy.Image do
   end
 
   relationships do
-    belongs_to :image, Dfoto.Gallery.Image do
+    belongs_to :image, DFoto.Gallery.Image do
       primary_key? true
       source_attribute :id
       public? true

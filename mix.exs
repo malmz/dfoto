@@ -1,4 +1,4 @@
-defmodule Dfoto.MixProject do
+defmodule DFoto.MixProject do
   use Mix.Project
 
   def project do
@@ -21,7 +21,7 @@ defmodule Dfoto.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Dfoto.Application, []},
+      mod: {DFoto.Application, []},
       extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end

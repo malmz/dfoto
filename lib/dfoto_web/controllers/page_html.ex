@@ -1,10 +1,10 @@
-defmodule DfotoWeb.PageHTML do
+defmodule DFotoWeb.PageHTML do
   @moduledoc """
   This module contains pages rendered by PageController.
 
   See the `page_html` directory for all templates available.
   """
-  use DfotoWeb, :html
+  use DFotoWeb, :html
 
   embed_templates "page_html/*"
 end

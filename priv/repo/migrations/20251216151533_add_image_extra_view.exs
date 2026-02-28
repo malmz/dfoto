@@ -1,4 +1,4 @@
-defmodule Dfoto.Repo.Migrations.AddImageExtraView do
+defmodule DFoto.Repo.Migrations.AddImageExtraView do
   use Ecto.Migration
 
   def up do

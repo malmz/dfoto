@@ -1,4 +1,4 @@
-defmodule Dfoto.Gallery.Paths do
+defmodule DFoto.Gallery.Paths do
   @moduledoc """
   Utilities for getting the right path to images
   """

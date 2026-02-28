@@ -1,16 +1,16 @@
-defmodule Dfoto.Gallery.Image do
+defmodule DFoto.Gallery.Image do
   require Ash.Resource.Change.Builtins
   require OK
-  alias Dfoto.Gallery.Paths
-  alias Dfoto.Gallery.UploadReactor
+  alias DFoto.Gallery.Paths
+  alias DFoto.Gallery.UploadReactor
 
   use Ash.Resource,
-    domain: Dfoto.Gallery,
+    domain: DFoto.Gallery,
     data_layer: AshPostgres.DataLayer
 
   postgres do
     table "images"
-    repo Dfoto.Repo
+    repo DFoto.Repo
   end
 
   actions do
@@ -78,15 +78,15 @@ defmodule Dfoto.Gallery.Image do
   end
 
   relationships do
-    belongs_to :album, Dfoto.Gallery.Album
-    belongs_to :photographer, Dfoto.Accounts.User
-    belongs_to :user, Dfoto.Accounts.User
+    belongs_to :album, DFoto.Gallery.Album
+    belongs_to :photographer, DFoto.Accounts.User
+    belongs_to :user, DFoto.Accounts.User
 
-    has_one :thumbnail_for, Dfoto.Gallery.Album do
+    has_one :thumbnail_for, DFoto.Gallery.Album do
       destination_attribute :thumbnail_id
     end
 
-    has_one :order, Dfoto.Gallery.OrderedImage do
+    has_one :order, DFoto.Gallery.OrderedImage do
       destination_attribute :id
     end
   end
@@ -96,6 +96,6 @@ defmodule Dfoto.Gallery.Image do
               :string,
               expr(photographer_guest_name || photographer.name || "Unknown")
 
-    calculate :extension, :string, {Dfoto.Calculations.FileExt, [key: :filename]}
+    calculate :extension, :string, {DFoto.Calculations.FileExt, [key: :filename]}
   end
 end

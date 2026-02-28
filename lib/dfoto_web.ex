@@ -1,12 +1,12 @@
-defmodule DfotoWeb do
+defmodule DFotoWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
 
   This can be used in your application as:
 
-      use DfotoWeb, :controller
-      use DfotoWeb, :html
+      use DFotoWeb, :controller
+      use DFotoWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -40,7 +40,7 @@ defmodule DfotoWeb do
     quote do
       use Phoenix.Controller, formats: [:html, :json]
 
-      use Gettext, backend: DfotoWeb.Gettext
+      use Gettext, backend: DFotoWeb.Gettext
 
       import Plug.Conn
 
@@ -80,16 +80,16 @@ defmodule DfotoWeb do
   defp html_helpers do
     quote do
       # Translation
-      use Gettext, backend: DfotoWeb.Gettext
+      use Gettext, backend: DFotoWeb.Gettext
 
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components
-      import DfotoWeb.CoreComponents
+      import DFotoWeb.CoreComponents
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS
-      alias DfotoWeb.Layouts
+      alias DFotoWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -99,9 +99,9 @@ defmodule DfotoWeb do
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
-        endpoint: DfotoWeb.Endpoint,
-        router: DfotoWeb.Router,
-        statics: DfotoWeb.static_paths()
+        endpoint: DFotoWeb.Endpoint,
+        router: DFotoWeb.Router,
+        statics: DFotoWeb.static_paths()
     end
   end
 

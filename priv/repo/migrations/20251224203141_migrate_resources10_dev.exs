@@ -1,4 +1,4 @@
-defmodule Dfoto.Repo.Migrations.MigrateResources10 do
+defmodule DFoto.Repo.Migrations.MigrateResources10 do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 

@@ -1,11 +1,11 @@
-defmodule Dfoto.Gallery.Album do
+defmodule DFoto.Gallery.Album do
   use Ash.Resource,
-    domain: Dfoto.Gallery,
+    domain: DFoto.Gallery,
     data_layer: AshPostgres.DataLayer
 
   postgres do
     table "albums"
-    repo Dfoto.Repo
+    repo DFoto.Repo
 
     custom_statements do
       statement :search_index do
@@ -143,8 +143,8 @@ defmodule Dfoto.Gallery.Album do
   end
 
   relationships do
-    has_many :images, Dfoto.Gallery.Image
-    belongs_to :thumbnail, Dfoto.Gallery.Image
+    has_many :images, DFoto.Gallery.Image
+    belongs_to :thumbnail, DFoto.Gallery.Image
   end
 
   calculations do

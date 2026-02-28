@@ -1,5 +1,5 @@
-defmodule Dfoto.Gallery.PreviewReactor do
-  alias Dfoto.Gallery.Paths
+defmodule DFoto.Gallery.PreviewReactor do
+  alias DFoto.Gallery.Paths
   use Reactor, extensions: [Reactor.File]
   use OK.Pipe
 

@@ -7,7 +7,7 @@
 # General application configuration
 import Config
 
-config :dfoto, DfotoWeb.AuthController, provider: Dfoto.AuthentikOidcProvider
+config :dfoto, DFotoWeb.AuthController, provider: DFoto.AuthentikOidcProvider
 
 config :ash,
   allow_forbidden_field_for_relationships_by_default?: true,
@@ -51,19 +51,19 @@ config :spark,
   ]
 
 config :dfoto,
-  ecto_repos: [Dfoto.Repo],
+  ecto_repos: [DFoto.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Dfoto.Accounts, Dfoto.Gallery]
+  ash_domains: [DFoto.Accounts, DFoto.Gallery]
 
 # Configures the endpoint
-config :dfoto, DfotoWeb.Endpoint,
+config :dfoto, DFotoWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: DfotoWeb.ErrorHTML, json: DfotoWeb.ErrorJSON],
+    formats: [html: DFotoWeb.ErrorHTML, json: DFotoWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Dfoto.PubSub,
+  pubsub_server: DFoto.PubSub,
   live_view: [signing_salt: "zYZ+UBqW"]
 
 # Configures the mailer
@@ -73,7 +73,7 @@ config :dfoto, DfotoWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :dfoto, Dfoto.Mailer, adapter: Swoosh.Adapters.Local
+config :dfoto, DFoto.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
