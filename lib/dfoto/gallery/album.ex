@@ -8,6 +8,27 @@ defmodule Dfoto.Gallery.Album do
     repo Dfoto.Repo
 
     custom_statements do
+      statement :text_search_configuration do
+        up """
+        CREATE TEXT SEARCH DICTIONARY swedish_hunspell (
+          Template = ispell,
+          DictFile = sv_se,
+          AffFile = sv_se,
+          Stopwords = swedish
+        );
+
+        CREATE TEXT SEARCH CONFIGURATION swedish_hunspell (copy = pg_catalog.swedish);
+        ALTER TEXT SEARCH CONFIGURATION swedish_hunspell
+          ALTER MAPPING FOR asciihword, asciiword, hword, hword_asciipart, hword_part, word
+          WITH swedish_hunspell, swedish_stem;
+        """
+
+        down """
+        DROP TEXT SEARCH CONFIGURATION swedish_hunspell;
+        DROP TEXT SEARCH DICTIONARY swedish_hunspell;
+        """
+      end
+
       statement :search_index do
         up "CREATE INDEX albums_search_idx ON albums USING GIN (to_tsvector('swedish_hunspell', title || ' ' || description));"
         down "DROP INDEX albums_search_idx;"

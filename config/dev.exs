@@ -3,7 +3,7 @@ config :ash, policies: [show_policy_breakdowns?: true]
 
 # Configure your database
 config :dfoto, Dfoto.Repo,
-  username: "",
+  username: "malmz",
   password: "",
   hostname: "localhost",
   database: "dfoto_dev",
@@ -87,4 +87,3 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
-import_config "secrets.exs"

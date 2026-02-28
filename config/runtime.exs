@@ -20,6 +20,12 @@ if System.get_env("PHX_SERVER") do
   config :dfoto, DfotoWeb.Endpoint, server: true
 end
 
+config :dfoto, :authentik,
+  issuer: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_ISSUER"),
+  client_id: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_CLIENT_ID"),
+  client_secret: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_CLIENT_SECRET"),
+  redirect_uri: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_REDIRECT_URI")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
@@ -71,12 +77,6 @@ if config_env() == :prod do
     token_signing_secret:
       System.get_env("TOKEN_SIGNING_SECRET") ||
         raise("Missing environment variable `TOKEN_SIGNING_SECRET`!")
-
-  config :dfoto, :authentik,
-    issuer: System.get_env("DFOTO_AUTH_AUTHENTIK_ISSUER"),
-    client_id: System.get_env("DFOTO_AUTH_AUTHENTIK_CLIENT_ID"),
-    client_secret: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_CLIENT_SECRET"),
-    redirect_uri: System.fetch_env!("DFOTO_AUTH_AUTHENTIK_REDIRECT_URI")
 
   # ## SSL Support
   #
