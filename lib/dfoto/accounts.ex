@@ -1,7 +1,18 @@
 defmodule DFoto.Accounts do
-  use Ash.Domain, otp_app: :dfoto
+  alias DFoto.Repo
+  alias DFoto.Accounts.User
 
-  resources do
-    resource DFoto.Accounts.User
+  def login_with_user_info(user_info) do
+    name = user_info["name"]
+    authentik_id = user_info["sub"]
+
+    attrs = %{name: name, authentik_id: authentik_id}
+
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert!(
+      on_conflict: {:replace, [:name]},
+      conflict_target: :authentik_id
+    )
   end
 end
