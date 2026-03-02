@@ -18,6 +18,11 @@ defmodule DfotoWeb.Router do
     plug :fetch_session
   end
 
+  pipeline :ensure_authenticated do
+    plug Oidcc.Plug.ExtractAuthorization
+    plug Oidcc.Plug.RequireAuthorization
+  end
+
   scope "/auth", DfotoWeb do
     pipe_through :browser
 
