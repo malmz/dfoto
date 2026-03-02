@@ -43,18 +43,29 @@ defmodule DFoto.Gallery do
     Repo.all(Album)
   end
 
+  @doc """
+  Returns the list of albums.
+
+  ## Examples
+
+      iex> list_published_albums(scope)
+      [%Album{}, ...]
+
+  """
   def list_published_albums() do
     Repo.all_by(Album, state: :published)
   end
 
   def search_albums(query) do
-    from p in Album,
-      where:
-        p.state == :published and
-          fragment(
-            "to_tsvector('swedish', title || ' ' || description) @@ websearch_to_tsquery('swedish', ?)",
-            ^query
-          )
+    Album
+    |> where(state: :published)
+    |> where(
+      fragment(
+        "to_tsvector('swedish', title || ' ' || description) @@ websearch_to_tsquery('swedish', ?)",
+        ^query
+      )
+    )
+    |> Repo.all()
   end
 
   @doc """
@@ -117,7 +128,16 @@ defmodule DFoto.Gallery do
 
   """
   def get_album!(%Scope{} = scope, id) do
-    Repo.get_by!(Album, id: id, user_id: scope.user.id)
+    Repo.get_by!(Album, id: id)
+  end
+
+  def get_album_with_images!(%Scope{} = scope, id) do
+    query =
+      from a in Album,
+        join: i in assoc(m, :images),
+        preload: [images: i]
+
+    Repo.get_by!(query, id: id)
   end
 
   @doc """
