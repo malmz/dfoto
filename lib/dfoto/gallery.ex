@@ -58,6 +58,51 @@ defmodule DFoto.Gallery do
   end
 
   @doc """
+  Publishes an album.
+
+  Sets the album status to :published and automatically assigns a thumbnail
+  from the first image if no thumbnail is set.
+
+  ## Examples
+
+      iex> publish_album(album)
+      {:ok, %Album{}}
+
+      iex> publish_album(album)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def publish_album(%Album{status: :published}) do
+    {:error, "Album is already published"}
+  end
+
+  def publish_album(%Album{} = album) do
+    album =
+      if is_nil(album.thumbnail_id) do
+        first_image =
+          Repo.one(
+            from(i in DFoto.Gallery.Image,
+              where: i.album_id == ^album.id,
+              order_by: [asc: i.inserted_at],
+              limit: 1
+            )
+          )
+
+        if first_image do
+          %{album | thumbnail_id: first_image.id}
+        else
+          album
+        end
+      else
+        album
+      end
+
+    album
+    |> Album.changeset(%{status: :published})
+    |> Repo.update()
+  end
+
+  @doc """
   Gets a single album.
 
   Raises `Ecto.NoResultsError` if the Album does not exist.
