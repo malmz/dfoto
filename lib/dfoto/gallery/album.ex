@@ -17,18 +17,6 @@ defmodule DFoto.Gallery.Album do
     timestamps type: :utc_datetime
   end
 
-  @type t :: %__MODULE__{
-          id: Ecto.UUID.t() | nil,
-          title: String.t() | nil,
-          description: String.t() | nil,
-          status: :draft | :published | :archived | nil,
-          start_at: DateTime.t() | nil,
-          version: integer() | nil,
-          thumbnail_id: Ecto.UUID.t() | nil,
-          inserted_at: DateTime.t() | nil,
-          updated_at: DateTime.t() | nil
-        }
-
   def changeset(album, attrs) do
     album
     |> cast(attrs, [:title, :description, :status, :start_at, :version, :thumbnail_id])
