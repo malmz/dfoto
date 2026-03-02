@@ -14,7 +14,7 @@ defmodule DFoto.Gallery.Album do
     has_many :images, Image
     belongs_to :thumbnail, Image
 
-    timestamps type: :utc_datetime
+    timestamps(type: :utc_datetime)
   end
 
   def changeset(album, attrs) do

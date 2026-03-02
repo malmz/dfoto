@@ -1,18 +1,28 @@
 defmodule DFoto.Gallery.Image do
-  require Ash.Resource.Change.Builtins
+  use Ecto.Schema
+  import Ecto.Changeset
+
   require OK
+  alias DFoto.Gallery.Album
+  alias DFoto.Accounts.User
   alias DFoto.Gallery.Paths
   alias DFoto.Gallery.UploadReactor
 
-  use Ash.Resource,
-    domain: DFoto.Gallery,
-    data_layer: AshPostgres.DataLayer
+  schema "images" do
+    field :filename, :string
+    field :photographer_guest_name, :string
+    field :taken_at, :utc_datetime
+    field :version, :integer, default: 1
 
-  postgres do
-    table "images"
-    repo DFoto.Repo
+    belongs_to :album, Album
+    belongs_to :user, User
+    belongs_to :photographer, User
+    has_one :thumbnail, Album
+
+    timestamps(type: :utc_datetime)
   end
 
+  """
   actions do
     defaults [:read, update: :*]
 
@@ -98,4 +108,5 @@ defmodule DFoto.Gallery.Image do
 
     calculate :extension, :string, {DFoto.Calculations.FileExt, [key: :filename]}
   end
+  """
 end
