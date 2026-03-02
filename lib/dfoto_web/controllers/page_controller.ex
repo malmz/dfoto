@@ -3,7 +3,7 @@ defmodule DFotoWeb.PageController do
   use DFotoWeb, :controller
 
   def index(conn, %{"q" => search}) do
-    albums = Gallery.search_albums!(search)
+    albums = Gallery.search_albums(search)
 
     conn
     |> assign(:search, search)
@@ -12,7 +12,7 @@ defmodule DFotoWeb.PageController do
   end
 
   def index(conn, _params) do
-    albums = Gallery.published_albums!()
+    albums = Gallery.list_published_albums()
 
     conn
     |> assign(:search, nil)
@@ -20,9 +20,8 @@ defmodule DFotoWeb.PageController do
     |> render(:index)
   end
 
-  def show(conn, %{"album_id" => album_id}) do
-    album =
-      Ash.get!(Gallery.Album, album_id, load: [:images])
+  def show(conn, %{"album_id" => id}) do
+    album = Gallery.get_album_with_images!(conn.assigns.current_scope, id)
 
     conn
     |> assign(:album, album)
