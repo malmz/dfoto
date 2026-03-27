@@ -1,30 +1,15 @@
 defmodule DFoto.Gallery.Legacy.Album do
-  use Ash.Resource,
-    domain: DFoto.Gallery,
-    data_layer: AshPostgres.DataLayer
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  postgres do
-    table "legacy_albums"
-    repo DFoto.Repo
+  schema "legacy_albums" do
+    field :legacy_id, :string
+    belongs_to :album, DFoto.Gallery.Album, primary_key: true
   end
 
-  attributes do
-    attribute :legacy_id, :string do
-      public? true
-      allow_nil? false
-    end
-  end
-
-  relationships do
-    belongs_to :album, DFoto.Gallery.Album do
-      primary_key? true
-      source_attribute :id
-      public? true
-      allow_nil? false
-    end
-  end
-
-  identities do
-    identity :unique_legacy_id, [:legacy_id]
+  def changeset(legacy_album, attrs) do
+    legacy_album
+    |> cast(attrs, [:legacy_id])
+    |> validate_required([:legacy_id])
   end
 end

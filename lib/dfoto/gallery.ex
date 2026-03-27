@@ -39,7 +39,7 @@ defmodule DFoto.Gallery do
       [%Album{}, ...]
 
   """
-  def list_albums(%Scope{} = scope) do
+  def list_albums(%Scope{} = _scope) do
     Repo.all(Album)
   end
 
@@ -134,7 +134,7 @@ defmodule DFoto.Gallery do
   def get_album_with_images!(%Scope{} = scope, id) do
     query =
       from a in Album,
-        join: i in assoc(m, :images),
+        join: i in assoc(a, :images),
         preload: [images: i]
 
     Repo.get_by!(query, id: id)
@@ -221,5 +221,13 @@ defmodule DFoto.Gallery do
     true = album.user_id == scope.user.id
 
     Album.changeset(album, attrs, scope)
+  end
+
+  def upload_image(%Scope{} = _scope, %Album{} = album, file_path, original_file_name) do
+    Reactor.run(DFoto.Gallery.UploadReactor, %{
+      file_path: file_path,
+      album_id: album.id,
+      original_file_name: original_file_name
+    })
   end
 end

@@ -2,11 +2,7 @@ defmodule DFoto.Gallery.Image do
   use Ecto.Schema
   import Ecto.Changeset
 
-  require OK
-  alias DFoto.Gallery.Album
-  alias DFoto.Accounts.User
-  alias DFoto.Gallery.Paths
-  alias DFoto.Gallery.UploadReactor
+  alias DFoto.Accounts.Scope
 
   schema "images" do
     field :filename, :string
@@ -14,15 +10,30 @@ defmodule DFoto.Gallery.Image do
     field :taken_at, :utc_datetime
     field :version, :integer, default: 1
 
-    belongs_to :album, Album
-    belongs_to :user, User
-    belongs_to :photographer, User
-    has_one :thumbnail, Album
+    belongs_to :album, DFoto.Gallery.Album
+    belongs_to :user, DFoto.Account.User
+    belongs_to :photographer, DFoto.Account.User
+    has_one :thumbnail, DFoto.Gallery.Album
+    has_one :legacy, DFoto.Gallery.Legacy.Image
 
     timestamps(type: :utc_datetime)
   end
 
-  """
+  def changeset(image, attrs, scope) do
+    image
+    |> cast(attrs, [:filename, :photographer_guest_name, :taken_at])
+    |> validate_required([:filename])
+    |> optimistic_lock(:version)
+    |> put_assoc(:user, scope.user)
+  end
+
+  def legacy_changeset(image, attrs, scope) do
+    image
+    |> changeset(attrs, scope)
+    |> cast_assoc(:legacy)
+  end
+
+  @old """
   actions do
     defaults [:read, update: :*]
 
