@@ -26,18 +26,20 @@ defmodule DFotoWeb.AuthController do
   end
 
   def callback(
-        %Plug.Conn{private: %{AuthorizationCallback => {:ok, {token, userinfo}}}} = conn,
+        %Plug.Conn{private: %{AuthorizationCallback => {:ok, {token, user_info}}}} = conn,
         params
       ) do
-    Logger.debug("Userinfo: #{inspect(userinfo)}")
+    Logger.debug("Userinfo: #{inspect(user_info)}")
     Logger.debug("Tokens: #{inspect(token)}")
 
+    DFoto.Accounts.update_user_info(user_info)
+
     DFoto.Accounts.User
-    |> Ash.Changeset.for_create(:login, %{user_info: userinfo, tokens: token})
+    |> Ash.Changeset.for_create(:login, %{user_info: user_info, tokens: token})
     |> Ash.create!()
 
     conn
-    |> put_session("oidcc_claims", userinfo)
+    |> put_session("oidcc_claims", user_info)
     |> redirect(
       to:
         case params[:state] do

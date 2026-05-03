@@ -2,7 +2,7 @@ defmodule DFoto.Accounts do
   alias DFoto.Repo
   alias DFoto.Accounts.User
 
-  def login_with_user_info(user_info) do
+  def update_user_info(user_info) do
     name = user_info["name"]
     authentik_id = user_info["sub"]
 

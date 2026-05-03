@@ -1,5 +1,6 @@
 defmodule DFotoWeb.AlbumLive.Index do
   use DFotoWeb, :live_view
+  alias DFoto.Gallery
 
   @impl true
   def render(assigns) do
@@ -50,8 +51,7 @@ defmodule DFotoWeb.AlbumLive.Index do
     {:ok,
      socket
      |> assign(:page_title, "Listing Albums")
-     |> assign_new(:current_user, fn -> nil end)
-     |> stream(:albums, Ash.read!(DFoto.Gallery.Album, actor: socket.assigns[:current_user]))}
+     |> stream(:albums, Gallery.list_albums(socket.assigns.current_scope))}
   end
 
   @impl true
