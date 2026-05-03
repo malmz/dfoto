@@ -1,5 +1,5 @@
-defmodule DFotoWeb.AlbumLive.Show do
-  use DFotoWeb, :live_view
+defmodule DfotoWeb.AlbumLive.Show do
+  use DfotoWeb, :live_view
 
   @impl true
   def render(assigns) do
@@ -31,6 +31,6 @@ defmodule DFotoWeb.AlbumLive.Show do
     {:ok,
      socket
      |> assign(:page_title, "Show Album")
-     |> assign(:album, Ash.get!(DFoto.Gallery.Album, id))}
+     |> assign(:album, Ash.get!(Dfoto.Gallery.Album, id))}
   end
 end

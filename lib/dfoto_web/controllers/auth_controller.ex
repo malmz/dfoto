@@ -1,5 +1,5 @@
-defmodule DFotoWeb.AuthController do
-  use DFotoWeb, :controller
+defmodule DfotoWeb.AuthController do
+  use DfotoWeb, :controller
   require Logger
   alias Oidcc.Plug.AuthorizationCallback
 
@@ -32,9 +32,9 @@ defmodule DFotoWeb.AuthController do
     Logger.debug("Userinfo: #{inspect(user_info)}")
     Logger.debug("Tokens: #{inspect(token)}")
 
-    DFoto.Accounts.update_user_info(user_info)
+    Dfoto.Accounts.update_user_info(user_info)
 
-    DFoto.Accounts.User
+    Dfoto.Accounts.User
     |> Ash.Changeset.for_create(:login, %{user_info: user_info, tokens: token})
     |> Ash.create!()
 

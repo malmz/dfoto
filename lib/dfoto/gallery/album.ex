@@ -1,8 +1,8 @@
-defmodule DFoto.Gallery.Album do
+defmodule Dfoto.Gallery.Album do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DFoto.Accounts.Scope
+  alias Dfoto.Accounts.Scope
 
   schema "albums" do
     field :title, :string
@@ -11,9 +11,9 @@ defmodule DFoto.Gallery.Album do
     field :start_at, :utc_datetime
     field :version, :integer, default: 1
 
-    has_many :images, DFoto.Gallery.Image
-    belongs_to :thumbnail, DFoto.Gallery.Image
-    has_one :legacy, DFoto.Gallery.Legacy.Album
+    has_many :images, Dfoto.Gallery.Image
+    belongs_to :thumbnail, Dfoto.Gallery.Image
+    has_one :legacy, Dfoto.Gallery.Legacy.Album
 
     timestamps(type: :utc_datetime)
   end

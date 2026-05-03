@@ -1,4 +1,4 @@
-defmodule DFotoWeb.CoreComponents do
+defmodule DfotoWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -27,7 +27,7 @@ defmodule DFotoWeb.CoreComponents do
 
   """
   use Phoenix.Component
-  use Gettext, backend: DFotoWeb.Gettext
+  use Gettext, backend: DfotoWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
@@ -472,9 +472,9 @@ defmodule DFotoWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(DFotoWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(DfotoWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(DFotoWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(DfotoWeb.Gettext, "errors", msg, opts)
     end
   end
 

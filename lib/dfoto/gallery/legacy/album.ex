@@ -1,11 +1,11 @@
-defmodule DFoto.Gallery.Legacy.Album do
+defmodule Dfoto.Gallery.Legacy.Album do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
   schema "legacy_albums" do
     field :legacy_id, :string
-    belongs_to :album, DFoto.Gallery.Album, primary_key: true
+    belongs_to :album, Dfoto.Gallery.Album, primary_key: true
   end
 
   def changeset(legacy_album, attrs) do

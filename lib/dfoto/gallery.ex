@@ -1,12 +1,12 @@
-defmodule DFoto.Gallery do
+defmodule Dfoto.Gallery do
   @moduledoc """
   The Gallery context.
   """
   import Ecto.Query, warn: false
-  alias DFoto.Repo
+  alias Dfoto.Repo
 
-  alias DFoto.Gallery.Album
-  alias DFoto.Accounts.Scope
+  alias Dfoto.Gallery.Album
+  alias Dfoto.Accounts.Scope
 
   @doc """
   Subscribes to scoped notifications about any album changes.
@@ -21,13 +21,13 @@ defmodule DFoto.Gallery do
   def subscribe_albums(%Scope{} = scope) do
     key = scope.user.id
 
-    Phoenix.PubSub.subscribe(DFoto.PubSub, "user:#{key}:albums")
+    Phoenix.PubSub.subscribe(Dfoto.PubSub, "user:#{key}:albums")
   end
 
   defp broadcast_album(%Scope{} = scope, message) do
     key = scope.user.id
 
-    Phoenix.PubSub.broadcast(DFoto.PubSub, "user:#{key}:albums", message)
+    Phoenix.PubSub.broadcast(Dfoto.PubSub, "user:#{key}:albums", message)
   end
 
   @doc """
@@ -92,7 +92,7 @@ defmodule DFoto.Gallery do
       if is_nil(album.thumbnail_id) do
         first_image =
           Repo.one(
-            from(i in DFoto.Gallery.Image,
+            from(i in Dfoto.Gallery.Image,
               where: i.album_id == ^album.id,
               order_by: [asc: i.inserted_at],
               limit: 1
@@ -224,7 +224,7 @@ defmodule DFoto.Gallery do
   end
 
   def upload_image(%Scope{} = _scope, %Album{} = album, file_path, original_file_name) do
-    Reactor.run(DFoto.Gallery.UploadReactor, %{
+    Reactor.run(Dfoto.Gallery.UploadReactor, %{
       file_path: file_path,
       album_id: album.id,
       original_file_name: original_file_name

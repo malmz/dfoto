@@ -1,7 +1,7 @@
-defmodule DFotoWeb.AlbumLive.Form do
+defmodule DfotoWeb.AlbumLive.Form do
   require Logger
-  alias DFoto.Gallery
-  use DFotoWeb, :live_view
+  alias Dfoto.Gallery
+  use DfotoWeb, :live_view
   use OK.Pipe
 
   @impl Phoenix.LiveView
@@ -167,7 +167,7 @@ defmodule DFotoWeb.AlbumLive.Form do
           nil
 
         id ->
-          Ash.get!(DFoto.Gallery.Album, id)
+          Ash.get!(Dfoto.Gallery.Album, id)
           |> Ash.load!(:images)
       end
 
@@ -336,7 +336,7 @@ defmodule DFotoWeb.AlbumLive.Form do
           # actor: socket.assigns.current_user
         )
       else
-        AshPhoenix.Form.for_create(DFoto.Gallery.Album, :create,
+        AshPhoenix.Form.for_create(Dfoto.Gallery.Album, :create,
           as: "album"
           # actor: socket.assigns.current_user
         )

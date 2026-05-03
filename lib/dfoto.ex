@@ -1,6 +1,6 @@
-defmodule DFoto do
+defmodule Dfoto do
   @moduledoc """
-  DFoto keeps the contexts that define your domain
+  Dfoto keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

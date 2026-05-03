@@ -1,6 +1,6 @@
-defmodule DFoto.Accounts do
-  alias DFoto.Repo
-  alias DFoto.Accounts.User
+defmodule Dfoto.Accounts do
+  alias Dfoto.Repo
+  alias Dfoto.Accounts.User
 
   def update_user_info(user_info) do
     name = user_info["name"]

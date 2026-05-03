@@ -1,4 +1,4 @@
-defmodule DFoto.Accounts.User do
+defmodule Dfoto.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 

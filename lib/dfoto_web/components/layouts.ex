@@ -1,9 +1,9 @@
-defmodule DFotoWeb.Layouts do
+defmodule DfotoWeb.Layouts do
   @moduledoc """
   This module holds layouts and related functionality
   used by your application.
   """
-  use DFotoWeb, :html
+  use DfotoWeb, :html
 
   # Embed all files in layouts/* within this module.
   # The default root.html.heex file contains the HTML
@@ -39,7 +39,7 @@ defmodule DFotoWeb.Layouts do
       <div class="navbar-start">
         <a href="/" class="flex-1 flex w-fit items-center gap-2">
           <img src={~p"/images/icon.svg"} width="36" class="-mt-1" />
-          <span class="text-lg font-bold text-orange-500">DFoto</span>
+          <span class="text-lg font-bold text-orange-500">Dfoto</span>
         </a>
       </div>
       <search class="navbar-center">
@@ -91,7 +91,7 @@ defmodule DFotoWeb.Layouts do
       <aside>
         <img src="/images/icon.svg" width="50" height="50" />
         <p>
-          <span class="font-bold">DFoto</span> <br /> Datateknologsektionens Fotoförening
+          <span class="font-bold">Dfoto</span> <br /> Datateknologsektionens Fotoförening
         </p>
         <p>Copyright © {Date.utc_today().year} - All right reserved</p>
       </aside>

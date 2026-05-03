@@ -1,4 +1,4 @@
-defmodule DFotoWeb.Telemetry do
+defmodule DfotoWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -87,7 +87,7 @@ defmodule DFotoWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {DFotoWeb, :count_users, []}
+      # {DfotoWeb, :count_users, []}
     ]
   end
 end

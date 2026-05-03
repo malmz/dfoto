@@ -1,4 +1,4 @@
-defmodule DFoto.Calculations.FileExt do
+defmodule Dfoto.Calculations.FileExt do
   use Ash.Resource.Calculation
 
   @impl true

@@ -1,4 +1,4 @@
-defmodule DFotoWeb.AuthHTML do
-  use DFotoWeb, :html
+defmodule DfotoWeb.AuthHTML do
+  use DfotoWeb, :html
   embed_templates "auth_html/*"
 end

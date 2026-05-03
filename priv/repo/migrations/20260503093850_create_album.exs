@@ -1,4 +1,4 @@
-defmodule DFoto.Repo.Migrations.CreateAlbum do
+defmodule Dfoto.Repo.Migrations.CreateAlbum do
   use Ecto.Migration
 
   def change do

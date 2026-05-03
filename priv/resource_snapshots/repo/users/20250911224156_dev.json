@@ -25,7 +25,7 @@
     "global": null,
     "strategy": null
   },
-  "repo": "Elixir.DFoto.Repo",
+  "repo": "Elixir.Dfoto.Repo",
   "schema": null,
   "table": "users"
 }

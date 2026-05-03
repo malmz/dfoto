@@ -1,6 +1,6 @@
-defmodule DFotoWeb.PageController do
-  alias DFoto.Gallery
-  use DFotoWeb, :controller
+defmodule DfotoWeb.PageController do
+  alias Dfoto.Gallery
+  use DfotoWeb, :controller
 
   def index(conn, %{"q" => search}) do
     albums = Gallery.search_albums(search)

@@ -1,4 +1,4 @@
-defmodule DFoto.Repo.Migrations.InitializeAndAddAuthenticationResources do
+defmodule Dfoto.Repo.Migrations.InitializeAndAddAuthenticationResources do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 

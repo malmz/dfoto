@@ -1,4 +1,4 @@
-defmodule DFoto.CustomFunctions do
+defmodule Dfoto.CustomFunctions do
   defmacro to_tsvector(lang, body) do
     quote do
       fragment("to_tsvector(?, ?)", unquote(lang), unquote(body))

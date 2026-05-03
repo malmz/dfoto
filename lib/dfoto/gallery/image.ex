@@ -1,8 +1,8 @@
-defmodule DFoto.Gallery.Image do
+defmodule Dfoto.Gallery.Image do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DFoto.Accounts.Scope
+  alias Dfoto.Accounts.Scope
 
   schema "images" do
     field :filename, :string
@@ -10,11 +10,11 @@ defmodule DFoto.Gallery.Image do
     field :taken_at, :utc_datetime
     field :version, :integer, default: 1
 
-    belongs_to :album, DFoto.Gallery.Album
-    belongs_to :user, DFoto.Account.User
-    belongs_to :photographer, DFoto.Account.User
-    has_one :thumbnail, DFoto.Gallery.Album
-    has_one :legacy, DFoto.Gallery.Legacy.Image
+    belongs_to :album, Dfoto.Gallery.Album
+    belongs_to :user, Dfoto.Account.User
+    belongs_to :photographer, Dfoto.Account.User
+    has_one :thumbnail, Dfoto.Gallery.Album
+    has_one :legacy, Dfoto.Gallery.Legacy.Image
 
     timestamps(type: :utc_datetime)
   end
@@ -99,15 +99,15 @@ defmodule DFoto.Gallery.Image do
   end
 
   relationships do
-    belongs_to :album, DFoto.Gallery.Album
-    belongs_to :photographer, DFoto.Accounts.User
-    belongs_to :user, DFoto.Accounts.User
+    belongs_to :album, Dfoto.Gallery.Album
+    belongs_to :photographer, Dfoto.Accounts.User
+    belongs_to :user, Dfoto.Accounts.User
 
-    has_one :thumbnail_for, DFoto.Gallery.Album do
+    has_one :thumbnail_for, Dfoto.Gallery.Album do
       destination_attribute :thumbnail_id
     end
 
-    has_one :order, DFoto.Gallery.OrderedImage do
+    has_one :order, Dfoto.Gallery.OrderedImage do
       destination_attribute :id
     end
   end
@@ -117,7 +117,7 @@ defmodule DFoto.Gallery.Image do
               :string,
               expr(photographer_guest_name || photographer.name || "Unknown")
 
-    calculate :extension, :string, {DFoto.Calculations.FileExt, [key: :filename]}
+    calculate :extension, :string, {Dfoto.Calculations.FileExt, [key: :filename]}
   end
   """
 end

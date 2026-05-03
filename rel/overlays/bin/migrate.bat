@@ -1,1 +1,1 @@
-call "%~dp0\dfoto" eval DFoto.Release.migrate
+call "%~dp0\dfoto" eval Dfoto.Release.migrate

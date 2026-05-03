@@ -1,6 +1,6 @@
-defmodule DFoto.Gallery.UploadReactor do
-  alias DFoto.Gallery.Paths
-  alias DFoto.Gallery
+defmodule Dfoto.Gallery.UploadReactor do
+  alias Dfoto.Gallery.Paths
+  alias Dfoto.Gallery
   use Reactor, extensions: [Ash.Reactor, Reactor.File]
 
   input :file_path
