@@ -53,12 +53,12 @@ defmodule DFoto.Gallery do
 
   """
   def list_published_albums() do
-    Repo.all_by(Album, state: :published)
+    Repo.all_by(Album, status: :published)
   end
 
   def search_albums(query) do
     Album
-    |> where(state: :published)
+    |> where(status: :published)
     |> where(
       fragment(
         "to_tsvector('swedish', title || ' ' || description) @@ websearch_to_tsquery('swedish', ?)",
