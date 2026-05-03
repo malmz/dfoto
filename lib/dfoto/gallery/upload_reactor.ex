@@ -7,10 +7,14 @@ defmodule DFoto.Gallery.UploadReactor do
   input :album_id
   input :original_file_name
 
-  create :create_image, Gallery.Image, :create do
-    inputs %{filename: input(:original_file_name), album_id: input(:album_id)}
-    undo :outside_transaction
-    undo_action :destroy
+  # create :create_image, Gallery.Image, :create do
+  #  inputs %{filename: input(:original_file_name), album_id: input(:album_id)}
+  #  undo :outside_transaction
+  #  undo_action :destroy
+  # end
+
+  step :create_image do
+    run fn {} -> :ok end
   end
 
   step :image_folder do

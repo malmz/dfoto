@@ -2,6 +2,7 @@ defmodule DFoto.Gallery.Legacy.Album do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key false
   schema "legacy_albums" do
     field :legacy_id, :string
     belongs_to :album, DFoto.Gallery.Album, primary_key: true
