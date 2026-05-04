@@ -5,6 +5,7 @@ defmodule Dfoto.Accounts.User do
   schema "users" do
     field :authentik_id, :string
     field :name, :string
+    field :authenticated_at, :utc_datetime, virtual: true
 
     timestamps(type: :utc_datetime)
   end

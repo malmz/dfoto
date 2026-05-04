@@ -1,6 +1,8 @@
 defmodule DfotoWeb.Router do
   use DfotoWeb, :router
 
+  import DfotoWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule DfotoWeb.Router do
     plug :put_root_layout, html: {DfotoWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_scope_for_user
   end
 
   pipeline :api do
@@ -26,12 +29,22 @@ defmodule DfotoWeb.Router do
     post "/callback", AuthController, :callback
   end
 
-  scope "/admin", DfotoWeb.AlbumLive do
-    pipe_through :browser
+  scope "/admin", DfotoWeb do
+    pipe_through [:browser, :require_authenticated_user]
 
-    live "/albums", Index, :index
-    live "/albums/new", Form, :new
-    live "/albums/:id", Form, :edit
+    live_session :require_authenticated_user,
+      on_mount: [{DfotoWeb.UserAuth, :require_authenticated}] do
+      scope "/albums", AlbumLive do
+        live "/", Index, :index
+        live "/new", Form, :new
+        live "/:id", Form, :edit
+      end
+
+      scope "/users", UserLive do
+        live "/settings", Settings, :edit
+        live "/settings/confirm-email/:token", Settings, :confirm_email
+      end
+    end
   end
 
   scope "/", DfotoWeb do
