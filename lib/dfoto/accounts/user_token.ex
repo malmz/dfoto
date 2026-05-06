@@ -5,12 +5,14 @@ defmodule Dfoto.Accounts.UserToken do
 
   @rand_size 32
 
-  @session_validity_in_days 14
+  @roles [dfoto: "dfoto", asp: "dfoto-asp"]
 
   schema "users_tokens" do
     field :token, :binary
-    field :context, :string
+    field :roles, {:array, Ecto.Enum}, values: @roles
+    field :refresh_token, :string
     field :authenticated_at, :utc_datetime
+    field :expires_at, :utc_datetime
     belongs_to :user, Dfoto.Accounts.User
 
     timestamps(type: :utc_datetime, updated_at: false)
@@ -35,10 +37,24 @@ defmodule Dfoto.Accounts.UserToken do
   and devices in the UI and allow users to explicitly expire any
   session they deem invalid.
   """
-  def build_session_token(user) do
+  def build_session_token(%{
+        user: user,
+        refresh_token: refresh_token,
+        expires_at: expires_at,
+        roles: roles
+      }) do
     token = :crypto.strong_rand_bytes(@rand_size)
     dt = user.authenticated_at || DateTime.utc_now(:second)
-    {token, %UserToken{token: token, context: "session", user_id: user.id, authenticated_at: dt}}
+
+    {token,
+     %UserToken{
+       token: token,
+       user_id: user.id,
+       refresh_token: refresh_token,
+       expires_at: expires_at,
+       roles: roles,
+       authenticated_at: dt
+     }}
   end
 
   @doc """
@@ -51,15 +67,13 @@ defmodule Dfoto.Accounts.UserToken do
   """
   def verify_session_token_query(token) do
     query =
-      from token in by_token_and_context_query(token, "session"),
+      from token in UserToken,
         join: user in assoc(token, :user),
-        where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: {%{user | authenticated_at: token.authenticated_at}, token.inserted_at}
+        where: [token: ^token],
+        select:
+          {%{user | authenticated_at: token.authenticated_at, roles: token.roles},
+           token.expires_at}
 
     {:ok, query}
-  end
-
-  defp by_token_and_context_query(token, context) do
-    from UserToken, where: [token: ^token, context: ^context]
   end
 end

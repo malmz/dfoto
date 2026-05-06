@@ -11,6 +11,7 @@ defmodule Dfoto.Gallery.Album do
     field :start_at, :utc_datetime
     field :version, :integer, default: 1
 
+    belongs_to :user, Dfoto.Accounts.User
     has_many :images, Dfoto.Gallery.Image
     belongs_to :thumbnail, Dfoto.Gallery.Image
     has_one :legacy, Dfoto.Gallery.Legacy.Album

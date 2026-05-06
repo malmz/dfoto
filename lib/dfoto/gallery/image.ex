@@ -2,8 +2,6 @@ defmodule Dfoto.Gallery.Image do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Dfoto.Accounts.Scope
-
   schema "images" do
     field :filename, :string
     field :photographer_guest_name, :string
@@ -11,9 +9,9 @@ defmodule Dfoto.Gallery.Image do
     field :version, :integer, default: 1
 
     belongs_to :album, Dfoto.Gallery.Album
-    belongs_to :user, Dfoto.Account.User
-    belongs_to :photographer, Dfoto.Account.User
-    has_one :thumbnail, Dfoto.Gallery.Album
+    belongs_to :user, Dfoto.Accounts.User
+    belongs_to :photographer, Dfoto.Accounts.User
+    has_one :thumbnail, Dfoto.Gallery.Album, foreign_key: :thumbnail_id
     has_one :legacy, Dfoto.Gallery.Legacy.Image
 
     timestamps(type: :utc_datetime)

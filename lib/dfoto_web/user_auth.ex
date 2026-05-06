@@ -9,7 +9,7 @@ defmodule DfotoWeb.UserAuth do
 
   # Make the remember me cookie valid for 14 days. This should match
   # the session validity setting in UserToken.
-  @max_cookie_age_in_days 14
+  @max_cookie_age_in_days 30
   @remember_me_cookie "_dfoto_web_user_remember_me"
   @remember_me_options [
     sign: true,
@@ -24,7 +24,7 @@ defmodule DfotoWeb.UserAuth do
   # it will result in less time before a session token expires for a user to get issued a new
   # token. This can be set to a value greater than `@max_cookie_age_in_days` to disable
   # the reissuing of tokens completely.
-  @session_reissue_age_in_days 7
+  @session_reissue_age_in_days 15
 
   @doc """
   Logs the user in.
@@ -32,11 +32,11 @@ defmodule DfotoWeb.UserAuth do
   Redirects to the session's `:user_return_to` path
   or falls back to the `signed_in_path/1`.
   """
-  def log_in_user(conn, user, params \\ %{}) do
+  def log_in_user(conn, user, %Oidcc.Token{} = token, params \\ %{}) do
     user_return_to = get_session(conn, :user_return_to)
 
     conn
-    |> create_or_extend_session(user, params)
+    |> create_or_extend_session(user, token, params)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
@@ -66,10 +66,10 @@ defmodule DfotoWeb.UserAuth do
   """
   def fetch_current_scope_for_user(conn, _opts) do
     with {token, conn} <- ensure_user_token(conn),
-         {user, token_inserted_at} <- Accounts.get_user_by_session_token(token) do
+         {user, token_expires_at} <- Accounts.get_user_by_session_token(token) do
       conn
       |> assign(:current_scope, Scope.for_user(user))
-      |> maybe_reissue_user_session_token(user, token_inserted_at)
+      |> maybe_reissue_user_session_token(user, token, token_expires_at)
     else
       nil -> assign(conn, :current_scope, Scope.for_user(nil))
     end
@@ -90,11 +90,11 @@ defmodule DfotoWeb.UserAuth do
   end
 
   # Reissue the session token if it is older than the configured reissue age.
-  defp maybe_reissue_user_session_token(conn, user, token_inserted_at) do
+  defp maybe_reissue_user_session_token(conn, user, token, token_inserted_at) do
     token_age = DateTime.diff(DateTime.utc_now(:second), token_inserted_at, :day)
 
     if token_age >= @session_reissue_age_in_days do
-      create_or_extend_session(conn, user, %{})
+      create_or_extend_session(conn, user, token, %{})
     else
       conn
     end
@@ -108,8 +108,8 @@ defmodule DfotoWeb.UserAuth do
   # When the session is created, rather than extended, the renew_session
   # function will clear the session to avoid fixation attacks. See the
   # renew_session function to customize this behaviour.
-  defp create_or_extend_session(conn, user, params) do
-    token = Accounts.generate_user_session_token(user)
+  defp create_or_extend_session(conn, user, token, params) do
+    token = Accounts.generate_user_session_token(user, token)
     remember_me = get_session(conn, :user_remember_me)
 
     conn
@@ -224,7 +224,7 @@ defmodule DfotoWeb.UserAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+        |> Phoenix.LiveView.redirect(to: ~p"/auth/authorize")
 
       {:halt, socket}
     end
@@ -239,7 +239,7 @@ defmodule DfotoWeb.UserAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must re-authenticate to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+        |> Phoenix.LiveView.redirect(to: ~p"/auth/authorize")
 
       {:halt, socket}
     end
@@ -259,7 +259,7 @@ defmodule DfotoWeb.UserAuth do
   @doc "Returns the path to redirect to after log in."
   # the user was already logged in, redirect to settings
   def signed_in_path(%Plug.Conn{assigns: %{current_scope: %Scope{user: %Accounts.User{}}}}) do
-    ~p"/users/settings"
+    ~p"/admin/albums"
   end
 
   def signed_in_path(_), do: ~p"/"
@@ -274,7 +274,7 @@ defmodule DfotoWeb.UserAuth do
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/users/log-in")
+      |> redirect(to: ~p"/auth/authorize")
       |> halt()
     end
   end

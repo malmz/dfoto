@@ -230,4 +230,8 @@ defmodule Dfoto.Gallery do
       original_file_name: original_file_name
     })
   end
+
+  def get_image!(%Scope{} = scope, id) do
+    Repo.get_by!(Image, id: id)
+  end
 end

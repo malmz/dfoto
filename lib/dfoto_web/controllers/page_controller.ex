@@ -29,8 +29,7 @@ defmodule DfotoWeb.PageController do
   end
 
   def image(conn, %{"album_id" => _album_id, "image_id" => image_id}) do
-    image =
-      Ash.get!(Gallery.Image, image_id, load: [:photographer_name, :extension, :order])
+    image = Gallery.get_image!(conn.assigns.current_scope, image_id)
 
     conn
     |> assign(:image, image)

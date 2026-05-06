@@ -8,6 +8,7 @@ defmodule Dfoto.Repo.Migrations.CreateAlbum do
       add :status, :text, null: false, default: "draft"
       add :start_at, :utc_datetime, null: false, default: fragment("now()")
       add :version, :integer, null: false, default: 1
+      add :user_id, references(:users), null: false
 
       timestamps()
     end
@@ -19,8 +20,8 @@ defmodule Dfoto.Repo.Migrations.CreateAlbum do
       add :version, :integer, null: false, default: 1
 
       add :album_id, references(:albums), null: false
-      add :user_id, references(:users, type: :uuid), null: false
-      add :photographer_id, references(:users, type: :uuid)
+      add :user_id, references(:users), null: false
+      add :photographer_id, references(:users)
 
       timestamps()
     end

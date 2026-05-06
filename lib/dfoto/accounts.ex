@@ -2,6 +2,9 @@ defmodule Dfoto.Accounts do
   import Ecto.Query
   alias Dfoto.Repo
   alias Dfoto.Accounts.{User, UserToken}
+  import Dfoto.Utils
+
+  @roles ["dfoto", "dfoto-asp"]
 
   def update_user_info!(%{"name" => name, "sub" => authentik_id}) do
     attrs = %{name: name, authentik_id: authentik_id}
@@ -51,8 +54,20 @@ defmodule Dfoto.Accounts do
   @doc """
   Generates a session token.
   """
-  def generate_user_session_token(user) do
-    {token, user_token} = UserToken.build_session_token(user)
+  def generate_user_session_token(user, %Oidcc.Token{} = token) do
+    roles =
+      token.id.claims["groups"]
+      |> Enum.map(&String.downcase/1)
+      |> Enum.filter(&static_member?(@roles, &1))
+
+    params = %{
+      user: user,
+      refresh_token: token.refresh,
+      expires_at: token.access.expires_at,
+      roles: roles
+    }
+
+    {token, user_token} = UserToken.build_session_token(params)
     Repo.insert!(user_token)
     token
   end
@@ -71,7 +86,7 @@ defmodule Dfoto.Accounts do
   Deletes the signed token with the given context.
   """
   def delete_user_session_token(token) do
-    Repo.delete_all(from(UserToken, where: [token: ^token, context: "session"]))
+    Repo.delete_all(from(UserToken, where: [token: ^token]))
     :ok
   end
 end

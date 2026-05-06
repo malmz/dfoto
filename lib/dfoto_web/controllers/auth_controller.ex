@@ -8,7 +8,8 @@ defmodule DfotoWeb.AuthController do
          provider: Application.compile_env(:dfoto, [__MODULE__, :provider]),
          client_id: &__MODULE__.client_id/0,
          client_secret: &__MODULE__.client_secret/0,
-         redirect_uri: &__MODULE__.callback_uri/0
+         redirect_uri: &__MODULE__.callback_uri/0,
+         scopes: ["email openid profile offline_access"]
        ]
        when action in [:authorize]
 
@@ -32,11 +33,10 @@ defmodule DfotoWeb.AuthController do
     Logger.debug("Userinfo: #{inspect(user_info)}")
     Logger.debug("Tokens: #{inspect(token)}")
 
-    Dfoto.Accounts.update_user_info(user_info)
+    user = Dfoto.Accounts.update_user_info!(user_info)
 
-    Dfoto.Accounts.User
-    |> Ash.Changeset.for_create(:login, %{user_info: user_info, tokens: token})
-    |> Ash.create!()
+    conn
+    |> DfotoWeb.UserAuth.log_in_user(user)
 
     conn
     |> put_session("oidcc_claims", user_info)

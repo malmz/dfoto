@@ -52,8 +52,11 @@ defmodule DfotoWeb.Router do
 
     get "/", PageController, :index
     get "/about", PageController, :about
-    get "/:album_id", PageController, :show
-    get "/:album_id/:image_id", PageController, :image
+
+    scope "/albums" do
+      get "/:album_id", PageController, :show
+      get "/:album_id/:image_id", PageController, :image
+    end
   end
 
   # Other scopes may use custom stacks.

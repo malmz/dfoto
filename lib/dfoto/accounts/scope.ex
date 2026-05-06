@@ -18,7 +18,7 @@ defmodule Dfoto.Accounts.Scope do
 
   alias Dfoto.Accounts.User
 
-  defstruct user: nil, roles: nil
+  defstruct user: nil
 
   @doc """
   Creates a scope for the given user.
